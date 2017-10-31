@@ -58,7 +58,7 @@ public class EventLoggingAction {
 	endDate: Must always be defined, default current date
 	transType: -1 for all, type number otherwise
 	 */
-	public void sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
+	public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
 
 	}
 }
