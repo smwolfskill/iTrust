@@ -5,6 +5,8 @@ import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
 import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
 
+import java.sql.Date;
+
 /**
  * Handles retrieving the log of record accesses for a given user Used by viewAccessLog.jsp
  * 
@@ -36,5 +38,27 @@ public class EventLoggingAction {
 	public void logEvent(TransactionType type, long loggedInMID, long secondaryMID, String addedInfo)
 			throws DBException {
 		this.transDAO.logTransaction(type, loggedInMID, secondaryMID, addedInfo);
+	}
+
+	/*
+	userRole: "all" for all, role otherwise
+	secondaryRole: "all" for all, role otherwise
+	startDate: Must always be defined, default Jan 1 1970
+	endDate: Must always be defined, default current date
+	transType: -1 for all, type number otherwise
+	 */
+	public void viewTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
+
+	}
+
+	/*
+	userRole: "all" for all, role otherwise
+	secondaryRole: "all" for all, role otherwise
+	startDate: Must always be defined, default Jan 1 1970
+	endDate: Must always be defined, default current date
+	transType: -1 for all, type number otherwise
+	 */
+	public void sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
+
 	}
 }

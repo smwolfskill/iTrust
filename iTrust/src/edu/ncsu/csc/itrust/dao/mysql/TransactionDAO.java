@@ -1,10 +1,6 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.DBUtil;
@@ -336,5 +332,9 @@ public class TransactionDAO {
 		} finally {
 			DBUtil.closeConnection(conn, ps);
 		}
+	}
+
+	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws DBException {
+		return null;
 	}
 }
