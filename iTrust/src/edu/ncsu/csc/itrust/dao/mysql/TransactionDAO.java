@@ -337,4 +337,25 @@ public class TransactionDAO {
 	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws DBException {
 		return null;
 	}
+
+	public String findRoleByMID(long MID) throws DBException{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String role = "";
+
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT Role FROM users WHERE MID=?");
+			ps.setLong(1, MID);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next())
+				role = rs.getString("Role");
+
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+		return role;
+	}
 }
