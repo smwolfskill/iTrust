@@ -2,8 +2,10 @@ package edu.ncsu.csc.itrust.unit.action;
 
 import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -13,9 +15,11 @@ import java.util.*;
 public class FilteredEventLoggingAction {
 
     private TransactionDAO transDAO;
+    private AuthDAO authDAO;
 
     public FilteredEventLoggingAction(DAOFactory factory) {
         this.transDAO = factory.getTransactionDAO();
+        this.authDAO = factory.getAuthDAO();
     }
 
     /*
@@ -36,7 +40,7 @@ public class FilteredEventLoggingAction {
     endDate: Must always be defined, default current date
     transType: -1 for all, type number otherwise
      */
-    public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws DBException {
+    public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws ITrustException {
         List<TransactionBean> beanList = this.transDAO.getFilteredTransactions(userRole, secondaryRole, startDate, endDate, transType);
 
         if (beanList == null || beanList.size() == 0) {
@@ -55,7 +59,7 @@ public class FilteredEventLoggingAction {
 
             //second bar chart: secondary user role v.s. number of transaction
             long secondaryMID = bean.getSecondaryMID();
-            String secondaryUserRole = secondaryRole.equals("all") ? this.transDAO.findRoleByMID(secondaryMID) : secondaryRole;
+            String secondaryUserRole = secondaryRole.equals("all") ? this.authDAO.getUserRole(secondaryMID).getUserRolesString() : secondaryRole;
             populateDataFromBeanList(secondaryData, secondaryUserRole);
 
             //third bar chart: month&year v.s. number of transaction
