@@ -1,6 +1,6 @@
 package edu.ncsu.csc.itrust.unit.action;
 
-import edu.ncsu.csc.itrust.action.EventLoggingAction;
+import edu.ncsu.csc.itrust.action.FilteredEventLoggingAction;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;

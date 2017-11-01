@@ -1,4 +1,4 @@
-package edu.ncsu.csc.itrust.unit.action;
+package edu.ncsu.csc.itrust.action;
 
 import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
