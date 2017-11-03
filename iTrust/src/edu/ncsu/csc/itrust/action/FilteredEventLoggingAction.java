@@ -59,7 +59,14 @@ public class FilteredEventLoggingAction {
 
             //second bar chart: secondary user role v.s. number of transaction
             long secondaryMID = bean.getSecondaryMID();
-            String secondaryUserRole = secondaryRole.equals("all") ? this.authDAO.getUserRole(secondaryMID).getUserRolesString() : secondaryRole;
+            String secondaryUserRole = secondaryRole;
+            if (secondaryRole.equals("all")) {
+                try {
+                    secondaryUserRole = this.authDAO.getUserRole(secondaryMID).getUserRolesString();
+                } catch (ITrustException e) {
+                    secondaryUserRole = "N/A";
+                }
+            }
             populateDataFromBeanList(secondaryData, secondaryUserRole);
 
             //third bar chart: month&year v.s. number of transaction
