@@ -1,9 +1,9 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.ApptBean;
@@ -11,6 +11,11 @@ import edu.ncsu.csc.itrust.beans.loaders.ApptBeanLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
 
+/**
+ * ApptDAO --- Interacts with DB to return ApptBean(s) related to a query.
+ *
+ * @last_edit   11/02/17, Scott Wolfskill
+ */
 @SuppressWarnings({})
 public class ApptDAO {
 	private transient final DAOFactory factory;
@@ -23,6 +28,43 @@ public class ApptDAO {
 		this.factory = factory;
 		this.apptTypeDAO = factory.getApptTypeDAO();
 		this.abloader = new ApptBeanLoader();
+	}
+
+	/**
+	 * Find and return all upcoming appointments within (n) days.
+	 * @param numDays Number of days after current date within which to find all appointments.
+	 * @return ApptBean List of upcoming appointments.
+	 */
+	public List<ApptBean> getUpcomingAppts(int numDays) throws SQLException, DBException {
+		Connection conn = null;
+		PreparedStatement pstring = null;
+		try {
+			conn = factory.getConnection();
+
+			pstring = conn.prepareStatement(
+					"SELECT * FROM appointment WHERE " + /*" sched_date.after(?)=TRUE AND sched_date.before(?)=TRUE");*/
+							"DATE(sched_date)<=DATE_ADD(CURRENT_DATE, INTERVAL ? DAY) AND " + //sched_date day is before or at (numDays) days from now
+							"sched_date>=CURRENT_DATE");	// sched_date is after or at today
+
+			/*Instant now = Instant.now();
+			Timestamp today = Timestamp.from(now);
+			Timestamp endDate = Timestamp.from(now.plus(n, ChronoUnit.DAYS)); //add n days to today
+			System.out.println("today = " + today.toString() + "; endDate = " + endDate.toString()
+					+ "; today < endDate ? " + today.before(endDate));*/
+
+			pstring.setInt(1, numDays);
+
+
+			final ResultSet results = pstring.executeQuery();
+			final List<ApptBean> abList = this.abloader.loadList(results);
+			results.close();
+			pstring.close();
+			return abList;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, pstring);
+		}
 	}
 	
 	public List<ApptBean> getAppt(final int apptID) throws SQLException, DBException {
