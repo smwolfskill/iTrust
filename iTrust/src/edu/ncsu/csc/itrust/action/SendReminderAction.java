@@ -1,14 +1,15 @@
 package edu.ncsu.csc.itrust.action;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import edu.ncsu.csc.itrust.beans.ApptBean;
-import edu.ncsu.csc.itrust.beans.PatientBean;
-import edu.ncsu.csc.itrust.beans.PersonnelBean;
+import edu.ncsu.csc.itrust.beans.MessageBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.ApptDAO;
-import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
-import edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
@@ -16,15 +17,13 @@ import java.util.*;
 
 public class SendReminderAction {
     private long loggedInMID;
-    private PatientDAO patientDAO;
-    private PersonnelDAO personnelDAO;
     private ApptDAO apptDAO;
+    private SendMessageAction smAction;
 
     public SendReminderAction(DAOFactory factory, long loggedInMID) {
         this.loggedInMID = loggedInMID;
-        this.patientDAO = factory.getPatientDAO();
-        this.personnelDAO = factory.getPersonnelDAO();
         this.apptDAO = factory.getApptDAO();
+        this.smAction = new SendMessageAction(factory, loggedInMID);
     }
 
     public void sendReminderForAppointments(int numDays) throws ITrustException
@@ -48,10 +47,20 @@ public class SendReminderAction {
        catch (FormValidationException e) {
            throw new ITrustException("FormValidation Error in sending reminders.");
        }
-
     }
 
     public void sendReminder(ApptBean aBean) throws ITrustException, SQLException, FormValidationException {
-        
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime date = aBean.getDate().toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, MMM d");
+
+        MessageBean message = new MessageBean();
+        message.setTo(aBean.getPatient());
+        message.setFrom(aBean.getHcp());
+        message.setSubject(String.format("Reminder: upcoming appointment in %d day(s)", now.until(date, ChronoUnit.DAYS)));
+        message.setBody(String.format("You have an appointment on %s with Dr. %s", date.format(formatter), smAction.getPersonnelName(aBean.getHcp())));
+        message.setSentDate(Timestamp.valueOf(now));
+
+        smAction.sendMessage(message);
     }
 }
