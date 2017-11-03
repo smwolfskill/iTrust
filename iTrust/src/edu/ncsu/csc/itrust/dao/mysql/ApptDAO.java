@@ -14,7 +14,7 @@ import edu.ncsu.csc.itrust.exception.DBException;
 /**
  * ApptDAO --- Interacts with DB to return ApptBean(s) related to a query.
  *
- * @last_edit   10/02/17, Scott Wolfskill
+ * @last_edit   11/02/17, Scott Wolfskill
  */
 @SuppressWarnings({})
 public class ApptDAO {

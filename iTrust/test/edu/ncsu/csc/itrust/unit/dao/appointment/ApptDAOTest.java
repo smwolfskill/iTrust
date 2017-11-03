@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 /**
  * ApptDAOTest --- Class for testing ApptDAO basic functionality, and UC41.1 request.
  *
- * @last_edit   10/02/17, Scott Wolfskill
+ * @last_edit   11/03/17, Scott Wolfskill
  */
 public class ApptDAOTest extends TestCase {
 	private DAOFactory factory = TestDAOFactory.getTestInstance();
@@ -83,7 +83,7 @@ public class ApptDAOTest extends TestCase {
 		apptDAO.scheduleAppt(appts[4]); //in 3 days exactly
 
 		upcomingAppts = apptDAO.getUpcomingAppts(1);
-		assertEquals(2, upcomingAppts.size());
+		assertEquals(2, upcomingAppts.size()); //assert only 2 returned
 	}
 
 	public void testAppointment() throws Exception {
