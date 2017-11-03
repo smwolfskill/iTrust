@@ -56,7 +56,7 @@ public class SendReminderActionTest extends TestCase {
 
 		assertEquals(mbList.size(), mbListBefore.size() + 1);
 		MessageBean mBeanDB = mbList.get(0);
-		assertEquals("Reminder: upcoming appointment in 2 day(s)", mBeanDB.getSubject());
+		assertEquals("Reminder: upcoming appointment in 3 day(s)", mBeanDB.getSubject());
 	}
 
 }
