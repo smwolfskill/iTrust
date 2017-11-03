@@ -1,12 +1,7 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
-<%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
-<%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 
-<%@page import="edu.ncsu.csc.itrust.beans.ApptBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.SendReminderAction"%>
-<%@ page import="java.util.*" %>
-<%@ page import="edu.ncsu.csc.itrust.exception.ITrustException" %>
 <%@include file="/global.jsp" %>
 
 <%
