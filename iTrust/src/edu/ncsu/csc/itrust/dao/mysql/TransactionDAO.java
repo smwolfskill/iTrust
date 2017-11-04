@@ -341,12 +341,12 @@ public class TransactionDAO {
 
 		String userRoleCommand="", secondaryRoleCommand="", transTypeCommand="";
 		if(userRole!=null && !userRole.equals("1000000000")) {
-			String role1 = userRole.equals("9") ? ">=" : "<";
+			String role1 = userRole.equals("hcp") ? ">=" : "<";
 			userRoleCommand = " AND loggedInMID " + role1 + " 9000000000 ";
 			System.out.println(userRoleCommand);
 		}
 		if(secondaryRole!=null && !secondaryRole.equals("1000000000")) {
-			String role2 = secondaryRole.equals("9") ? ">=" : "<";
+			String role2 = secondaryRole.equals("patient") ? ">=" : "<";
 			secondaryRoleCommand = " AND secondaryMID " + role2 + " 9000000000 ";
 			System.out.println(secondaryRoleCommand);
 		}
@@ -357,8 +357,10 @@ public class TransactionDAO {
 
 		try {
 			conn = factory.getConnection();
-			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null)
+			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null) {
+				System.out.println("all null");
 				ps = conn.prepareStatement("SELECT * FROM transactionlog");
+			}
 			else {
 				System.out.println(userRole+" ");
 				System.out.println(secondaryRole+"");

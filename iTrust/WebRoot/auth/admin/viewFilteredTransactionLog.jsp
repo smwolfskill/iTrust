@@ -26,32 +26,63 @@
 
 
     FilteredEventLoggingAction action = new FilteredEventLoggingAction(DAOFactory.getProductionInstance());
-    List<TransactionBean> accesses; //stores entries in the access log
+    List<TransactionBean> accesses = new ArrayList<>(); //stores entries in the access log
+    String url = "";
 
-    try{
+
+    try {
         Date startDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("startDate")));
         Date endDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("endDate")));
-        accesses = action.viewTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
-    } catch(Exception e){
-//        e.printHTML(pageContext.getOut());
-        accesses = action.viewTransactionLog(null,null,null,null,null);
+        System.out.println("start");
+        if (request.getParameter("submit").equals("Sum Filtered Records")) {
+            System.out.println("summmmm");
+            url = action.sumTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
+            System.out.println(url);
+        }
+        else {
+            System.out.println("default");
+            accesses = action.viewTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
+        }
+    } catch (Exception e) {
+        //        e.printHTML(pageContext.getOut());
+        System.out.println("exception-null");
+        accesses = action.viewTransactionLog(null, null, null, null, null);
     }
+
 
 %>
 <h1>Viewing Transaction Log</h1>
 <br />
 <table class="fTable" align='center'>
-    <%--<tr>--%>
-        <%--<th><a href="#" onClick="javascript:sortBy('date');">Date</a></th>--%>
-        <%--<th>Accessor</th>--%>
-        <%--<th><a href = "#" onClick="javascript:sortBy('role');">Role</a></th>--%>
-        <%--<th>Description</th>--%>
-    <%--</tr>--%>
-    <%
-//        boolean hasData = false;
-//        List<PersonnelBean> personnelList = new ArrayList<PersonnelBean>();
+
+
+
+<%--    boolean hasData = false;
 //        int index = 0;
 //        loggingAction.logEvent(TransactionType.ACCESS_LOG_VIEW, loggedInMID, 0, "");
+//        System.out.println("beginning");
+//--%>
+
+    <%
+        if( request.getParameter("submit") != null && request.getParameter("submit").equals("Sum Filtered Records")) {
+    %>
+        <tr>
+            <td ><%= (url) %></td>
+        </tr>
+    <%
+        }
+        else {
+    %>
+
+    <tr>
+        <th>Date</th>
+        <th>User Role</th>
+        <th>Secondary Role</th>
+        <th>Transaction Type</th>
+        <th>Additional Info</th>
+    </tr>
+
+    <%
         for(TransactionBean t : accesses) {
             System.out.println(t.toString());
             String userRoleString[] = new String[2];
@@ -73,9 +104,11 @@
         <td ><%= StringEscapeUtils.escapeHtml("" + (userRoleString[0]))%></td>
 
         <td><%= StringEscapeUtils.escapeHtml("" + (userRoleString[1])) %></td>
-        <td ><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().getCode())) %></td>
+        <td ><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().getActionPhrase())) %></td>
+        <td ><%= StringEscapeUtils.escapeHtml("" + (t.getAddedInfo())) %></td>
     </tr>
     <%
+            }
         }
 
         String startDate = action.getDefaultStart(accesses);
@@ -144,17 +177,17 @@
             </tr>
         </table>
         <br />
-        <input type="submit" name="submit" value="Filter Records">
-
+        <input type="submit" name="submit" value="View Filtered Records">
+        <input type="submit" name="submit" value="Sum Filtered Records">
     </div>
 </form>
 
-<%--<script type='text/javascript'>--%>
-    <%--function sortBy(dateOrRole) {--%>
-        <%--document.getElementsByName('sortBy')[0].value = dateOrRole;--%>
-        <%--document.forms[0].submit.click();--%>
-    <%--}--%>
+<script type='text/javascript'>
+    function sortBy(dateOrRole) {
+        document.getElementsByName('sortBy')[0].value = dateOrRole;
+        document.forms[0].submit.click();
+    }
 
-<%--</script>--%>
+</script>
 
 <%@include file="/footer.jsp"%>

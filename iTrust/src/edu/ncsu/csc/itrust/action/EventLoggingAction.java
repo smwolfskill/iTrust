@@ -47,7 +47,4 @@ public class EventLoggingAction {
 	}
 
 
-<<<<<<< HEAD
-=======
->>>>>>> 91760185c451c025784218c8ebe83b8f456f826f
 }
