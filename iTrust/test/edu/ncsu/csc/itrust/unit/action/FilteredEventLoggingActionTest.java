@@ -27,7 +27,7 @@ public class FilteredEventLoggingActionTest extends TestCase{
     }
 
     public void testViewTransactionLog() throws Exception {
-        List<TransactionBean> list = action.viewTransactionLog("9", "0", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
+        List<TransactionBean> list = action.viewTransactionLog("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
         assertEquals(9.0, list.get(0).getLoggedInMID()/1e9 );
         assertTrue( list.get(0).getSecondaryMID()/1e9 < 1e3 );
         assertEquals(1900, list.get(0).getTransactionType().getCode() );
@@ -47,32 +47,34 @@ public class FilteredEventLoggingActionTest extends TestCase{
         gen.standardData();
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         Date startDate = new Date(df.parse("06-25-2007").getTime());
-        Date endDate = new Date(df.parse("06-25-2007").getTime());
+        Date endDate = new Date(df.parse("06-26-2007").getTime());
         String url = action.sumTransactionLog("hcp", "patient", startDate, endDate, "1900");
-        String expectedURL = "<div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+        String expectedURL = "<div><img name=\"chart1\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
                 + "3"
                 + "&amp;chxl=0:"
-                + "|2008-06"
-                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year\"></div><div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "|2007-6"
+                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year\"></div><div><img name=\"chart2\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
                 + "3"
                 + "&amp;chxl=0:"
                 + "|1900"
-                + "&amp;chbh=25,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Type\"></div><div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "&amp;chbh=25,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Type\"></div><div><img name=\"chart3\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
                 + "3"
                 + "&amp;chxl=0:"
                 + "|hcp"
-                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Logged-in+User\"></div><div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Logged-in+User\"></div><div><img name=\"chart4\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
                 + "3"
                 + "&amp;chxl=0:"
                 + "|patient"
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Secondary+User\"></div>";
+        System.out.println(url);
+        assertTrue(url.equals(expectedURL));
     }
 }

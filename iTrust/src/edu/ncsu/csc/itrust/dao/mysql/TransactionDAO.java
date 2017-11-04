@@ -346,7 +346,9 @@ public class TransactionDAO {
 			System.out.println(userRoleCommand);
 		}
 		if(secondaryRole!=null && !secondaryRole.equals("1000000000")) {
-			String role2 = secondaryRole.equals("patient") ? ">=" : "<";
+
+			String role2 = secondaryRole.equals("hcp") ? ">=" : "<";
+
 			secondaryRoleCommand = " AND secondaryMID " + role2 + " 9000000000 ";
 			System.out.println(secondaryRoleCommand);
 		}
