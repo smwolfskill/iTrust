@@ -1,6 +1,7 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.DBUtil;
@@ -334,7 +335,63 @@ public class TransactionDAO {
 		}
 	}
 
-	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws DBException {
-		return null;
+	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, String transType) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		String userRoleCommand="", secondaryRoleCommand="", transTypeCommand="";
+		if(userRole!=null && !userRole.equals("1000000000")) {
+			String role1 = userRole.equals("9") ? ">=" : "<";
+			userRoleCommand = " AND loggedInMID " + role1 + " 9000000000 ";
+			System.out.println(userRoleCommand);
+		}
+		if(secondaryRole!=null && !secondaryRole.equals("1000000000")) {
+			String role2 = secondaryRole.equals("9") ? ">=" : "<";
+			secondaryRoleCommand = " AND secondaryMID " + role2 + " 9000000000 ";
+			System.out.println(secondaryRoleCommand);
+		}
+		if(transType!=null && !transType.equals("1000000000")) {
+			transTypeCommand = " AND transactionCode = " + transType;
+			System.out.println(transTypeCommand);
+		}
+
+		try {
+			conn = factory.getConnection();
+			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null)
+				ps = conn.prepareStatement("SELECT * FROM transactionlog");
+			else {
+				System.out.println(userRole+" ");
+				System.out.println(secondaryRole+"");
+				System.out.println(startDate);
+				System.out.println(endDate);
+				System.out.println(transType);
+				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE " +
+						"timeLogged >= ? AND timeLogged <= ?" +
+						//"AND loggedInMID"+role1+"9000000000 AND secondaryMID"+role2+"9000000000"+
+						userRoleCommand + secondaryRoleCommand + transTypeCommand);
+						//"transactionCode = ?");
+				//ps.setString(1, transType);
+				ps.setTimestamp(1, new Timestamp(startDate.getTime()));
+				ps.setTimestamp(2, new Timestamp(endDate.getTime()));
+				//ps.setBoolean(4, role1);
+				//ps.setBoolean(5, role2);
+				//ps.setString(4, userRole);
+				//ps.setString(5, secondaryRole);
+			}
+			ResultSet rs = ps.executeQuery();
+//			loggedInMID/1e9 = " + userRole +
+//			" AND secondaryMID/1e9 = " + secondaryRole + " AND
+//			WHERE timeLogged <= " + endDate +
+//			" And timeLogged >= " + startDate +" AND transactionCode = " +transType
+			List<TransactionBean> loadlist = loader.loadList(rs);
+			rs.close();
+			ps.close();
+			return loadlist;
+		} catch (SQLException e) {
+
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
 	}
 }

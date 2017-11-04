@@ -1,5 +1,7 @@
 package edu.ncsu.csc.itrust.unit.dao.transaction;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -27,7 +29,19 @@ public class LogTransactionTest extends TestCase {
 		assertEquals(1L, list.get(3).getLoggedInMID());
 		assertEquals(TransactionType.DEMOGRAPHICS_EDIT, list.get(3).getTransactionType());
 	}
-	
+
+	public void testGetFilteredTransactions() throws Exception {
+		List<TransactionBean> list = tranDAO.getFilteredTransactions("9", "0", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
+		assertEquals(9.0, list.get(0).getLoggedInMID()/1e9 );
+		assertTrue( list.get(0).getSecondaryMID()/1e9 < 1e3 );
+		assertEquals(1900, list.get(0).getTransactionType().getCode() );
+	}
+
+	public void testGetFilteredTransactions_AllUserAllTransType() throws Exception {
+		List<TransactionBean> list = tranDAO.getFilteredTransactions("1000000000", "1000000000", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2020"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2200"), "1000000000");
+		assertEquals(0, list.size() );
+	}
+
 	public void testLogFull() throws Exception {
 		tranDAO.logTransaction(TransactionType.OFFICE_VISIT_EDIT, 9000000000L, 1L, "added information");
 		List<TransactionBean> list = tranDAO.getAllTransactions();
