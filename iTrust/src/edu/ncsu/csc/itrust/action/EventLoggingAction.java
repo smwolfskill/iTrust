@@ -48,16 +48,6 @@ public class EventLoggingAction {
 
 
 <<<<<<< HEAD
-	/*
-	userRole: "all" for all, role otherwise
-	secondaryRole: "all" for all, role otherwise
-	startDate: Must always be defined, default Jan 1 1970
-	endDate: Must always be defined, default current date
-	transType: -1 for all, type number otherwise
-	 */
-	public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
-
-	}
 =======
 >>>>>>> 91760185c451c025784218c8ebe83b8f456f826f
 }
