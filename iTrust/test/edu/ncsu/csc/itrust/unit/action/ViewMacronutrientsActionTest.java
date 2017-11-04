@@ -52,10 +52,10 @@ public class ViewMacronutrientsActionTest extends TestCase {
 			
 	    	MacronutrientsBean msjData = msj.getMsjData(341);
 	    	
-	    	assertEquals(40, msjData.getYears());
+	    	assertEquals(42, msjData.getYears());
 	    	assertEquals(112.5, msjData.getWeight(), .001);
 	    	assertEquals(65.0, msjData.getHeight(), .001);
-	    	assertEquals(1336.25, msjData.getMsj(), .001);
+	    	assertEquals(1326.25, msjData.getMsj(), .001);
 	    	assertEquals(341L, msjData.getPatientID());
 			
 		} catch (ITrustException e) {
@@ -111,10 +111,10 @@ public class ViewMacronutrientsActionTest extends TestCase {
 			
 	    	MacronutrientsBean msjData = msj.getMsjData(342);
 	    	
-	    	assertEquals(60, msjData.getYears());
+	    	assertEquals(62, msjData.getYears());
 	    	assertEquals(112.5, msjData.getWeight(), .001);
 	    	assertEquals(65.0, msjData.getHeight(), .001);
-	    	assertEquals(1236.25, msjData.getMsj(), .001);
+	    	assertEquals(1226.25, msjData.getMsj(), .001);
 	    	assertEquals(342L, msjData.getPatientID());
 	    	
 	    	List<FoodEntryBean> foodentry = action.getDiaryTotals(342);

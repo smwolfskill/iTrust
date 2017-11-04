@@ -1,16 +1,23 @@
 package edu.ncsu.csc.itrust.action;
 
+import edu.ncsu.csc.itrust.beans.PatientBean;
+import edu.ncsu.csc.itrust.beans.PersonnelBean;
 import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
+import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FilteredEventLoggingAction {
 
@@ -29,8 +36,65 @@ public class FilteredEventLoggingAction {
 	endDate: Must always be defined, default current date
 	transType: -1 for all, type number otherwise
 	 */
-    public void viewTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType){
+    public List<TransactionBean> viewTransactionLog(String userRole, String secondaryRole, java.util.Date startDate, java.util.Date endDate, String transType){
 
+        List<TransactionBean> accesses; //stores the log entries
+//        List<PersonnelBean> dlhcps;
+        try {
+            accesses = transDAO.getFilteredTransactions(userRole, secondaryRole, startDate, endDate, transType);
+            return accesses;
+        } catch (DBException e) {
+            System.out.println(e.getExtendedMessage());
+            return null;
+        }
+
+        //get the medical dependents for a signed in user. If the selected user is not the
+        //signed in user or one of the dependents, then the user doesn't have access to the log
+//        List<PatientBean> patientRelatives = getRepresented(loggedInMID);
+//
+//
+//        dlhcps = patientDAO.getDeclaredHCPs(mid);
+//
+//        boolean midInScope = false;
+//        for (PatientBean pb : patientRelatives) {
+//            if (pb.getMID() == mid)
+//                midInScope = true;
+//        }
+//        if (mid != loggedInMID && !midInScope) { //the selected user in the form is out of scope and can't be shown to the user
+//            throw new FormValidationException("Log to View.");
+//        }
+//
+//        //user has either 0 or 1 DLHCP's. Get one if exists so it can be filtered from results
+//        long dlhcpID = -1;
+//        if(!dlhcps.isEmpty())
+//            dlhcpID = dlhcps.get(0).getMID();
+//
+//        if (startDate == null || endDate == null)
+//            return transDAO.getAllRecordAccesses(mid, dlhcpID, getByRole);
+//
+//        try {
+//			/*the way the Date class works, is if you enter more months, or days than
+//			 is allowed, it will simply mod it, and add it all together. To make sure it
+//			 matches MM/dd/yyyy, I am going to use a Regular Expression
+//			 */
+//            //month can have 1 or 2 digits, same with day, and year must have 4
+//            Pattern p = Pattern.compile("[0-9]{1,2}?/[0-9]{1,2}?/[0-9]{4}?");
+//            Matcher m = p.matcher(endDate);
+//            Matcher n = p.matcher(startDate);
+//            //if it fails to match either of them, throw the form validation exception
+//            if (!m.matches() || !n.matches()) {
+//                throw new FormValidationException("Enter dates in MM/dd/yyyy");
+//            }
+//
+//            java.util.Date lower = new SimpleDateFormat("MM/dd/yyyy").parse(lostartDatewerDate);
+//            java.util.Date upper = new SimpleDateFormat("MM/dd/yyyy").parse(endDate);
+//
+//            if (lower.after(upper))
+//                throw new FormValidationException("Start date must be before end date!");
+//            accesses = transDAO.getRecordAccesses(mid, dlhcpID, lower, upper, getByRole);
+//        } catch (ParseException e) {
+//            throw new FormValidationException("Enter dates in MM/dd/yyyy");
+//        }
     }
 
     /*
@@ -40,7 +104,7 @@ public class FilteredEventLoggingAction {
     endDate: Must always be defined, default current date
     transType: -1 for all, type number otherwise
      */
-    public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, int transType) throws ITrustException {
+    public String sumTransactionLog(String userRole, String secondaryRole, Date startDate, Date endDate, String transType) throws ITrustException {
         List<TransactionBean> beanList = this.transDAO.getFilteredTransactions(userRole, secondaryRole, startDate, endDate, transType);
 
         if (beanList == null || beanList.size() == 0) {
@@ -160,5 +224,34 @@ public class FilteredEventLoggingAction {
         } else {
             loggedInData.put(loggedInRole, 1);
         }
+    }
+
+    public String getDefaultStart(List<TransactionBean> accesses) {
+        String startDate = "";
+        if (accesses.size() > 0) {
+            startDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(0)
+                    .getTimeLogged().getTime()));
+        } else {
+            startDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date());
+        }
+        return startDate;
+    }
+
+    /**
+     * Returns the date of the last Transaction in the list passed as a param if the list is not empty
+     * otherwise, returns today's date
+     *
+     * @param accesses A java.util.List of TransactionBeans storing the access.
+     * @return A String representation of the date of the last transaction.
+     */
+    public String getDefaultEnd(List<TransactionBean> accesses) {
+        String endDate = "";
+        if (accesses.size() > 0) {
+            endDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(accesses.size() - 1)
+                    .getTimeLogged().getTime()));
+        } else {
+            endDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date());
+        }
+        return endDate;
     }
 }
