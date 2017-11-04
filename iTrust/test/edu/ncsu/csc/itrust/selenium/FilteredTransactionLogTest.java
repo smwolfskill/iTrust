@@ -29,7 +29,9 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("Patient");
 
         //Set dates
+        driver.findElement(By.name("startDate")).clear();
         driver.findElement(By.name("startDate")).sendKeys("06/25/2007");
+        driver.findElement(By.name("endDate")).clear();
         driver.findElement(By.name("endDate")).sendKeys("06/26/2007");
 
         //select "1900" for transaction type
@@ -40,6 +42,7 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
 
         //Find charts
         assertFalse(driver.findElement(By.className("fTable")) == null);
+        assertTrue(driver.getPageSource().contains("2007-06-25 06:54:59.0"));
     }
 
     public void testSumTransLogTest() throws Exception {
