@@ -133,16 +133,16 @@
                 <td>
                     <select name="userRole" id="userRoleSelectMenu">
                         <option value="1000000000"> All</option>
-                        <option value="<%= Role.HCP.getMidFirstDigit() %>"> Doctor</option>
-                        <option value="<%= Role.PATIENT.getMidFirstDigit() %>"> Patient</option>
+                        <option value="hcp"> Doctor</option>
+                        <option value="patient"> Patient</option>
 
                     </select>
                 </td>
                 <td>
                     <select name="secondaryRole" id="secondaryRoleSelectMenu">
                         <option value="1000000000"> All</option>
-                        <option value="<%= Role.HCP.getMidFirstDigit() %>"> Doctor</option>
-                        <option value="<%= Role.PATIENT.getMidFirstDigit() %>"> Patient</option>
+                        <option value="hcp"> Doctor</option>
+                        <option value="patient"> Patient</option>
 
                     </select>
                 </td>

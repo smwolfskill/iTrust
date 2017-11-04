@@ -57,8 +57,8 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("Patient");
 
         //Set dates
-        driver.findElement(By.name("startDate")).sendKeys("06/10/2007");
-        driver.findElement(By.name("endDate")).sendKeys("06/26/2017");
+        driver.findElement(By.name("startDate")).sendKeys("06/25/2007");
+        driver.findElement(By.name("endDate")).sendKeys("06/26/2007");
 
         //select "1900" for transaction type
         new Select(driver.findElement(By.name("transactionType"))).selectByVisibleText("1900");
@@ -67,9 +67,9 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         driver.findElement(By.name("submitSum")).click();
 
         //Find charts
-        assertFalse(driver.findElement(By.name("chart1")) == null);
-        assertFalse(driver.findElement(By.name("chart2")) == null);
-        assertFalse(driver.findElement(By.name("chart3")) == null);
-        assertFalse(driver.findElement(By.name("chart4")) == null);
+        assertFalse(driver.findElements(By.id("chart1")).size() == 0);
+        assertFalse(driver.findElement(By.id("chart2")) == null);
+        assertFalse(driver.findElement(By.id("chart3")) == null);
+        assertFalse(driver.findElement(By.id("chart4")) == null);
     }
 }

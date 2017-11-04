@@ -193,25 +193,25 @@ public class FilteredEventLoggingAction {
         }
         typeTransNum = typeTransNum.substring(0, typeTransNum.length() - 1);
 
-        return "<div><img name=\"chart1\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+        return "<div><img id=\"chart1\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + dateTransNum
                 + "&amp;chxr=1,0,"
                 + dateMaxString
                 + "&amp;chxl=0:"
                 + dates
-                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year\"></div><div><img name=\"chart2\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year\"></div><div><img id=\"chart2\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + typeTransNum
                 + "&amp;chxr=1,0,"
                 + typeMaxString
                 + "&amp;chxl=0:"
                 + types
-                + "&amp;chbh=25,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Type\"></div><div><img name=\"chart3\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "&amp;chbh=25,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Type\"></div><div><img id=\"chart3\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + loggedInTransNum
                 + "&amp;chxr=1,0,"
                 + loggedInMaxString
                 + "&amp;chxl=0:"
                 + loggedInUsers
-                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Logged-in+User\"></div><div><img name=\"chart4\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
+                + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Logged-in+User\"></div><div><img id=\"chart4\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + secondaryTransNum
                 + "&amp;chxr=1,0,"
                 + secondaryMaxString
