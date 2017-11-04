@@ -361,7 +361,7 @@ public class TransactionDAO {
 			conn = factory.getConnection();
 			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null) {
 				System.out.println("all null");
-				ps = conn.prepareStatement("SELECT * FROM transactionlog");
+				ps = conn.prepareStatement("SELECT * FROM transactionlog ORDER BY timeLogged DESC");
 			}
 			else {
 				System.out.println(userRole+" ");
@@ -372,7 +372,7 @@ public class TransactionDAO {
 				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE " +
 						"timeLogged >= ? AND timeLogged <= ?" +
 						//"AND loggedInMID"+role1+"9000000000 AND secondaryMID"+role2+"9000000000"+
-						userRoleCommand + secondaryRoleCommand + transTypeCommand);
+						userRoleCommand + secondaryRoleCommand + transTypeCommand +" ORDER BY timeLogged DESC");
 						//"transactionCode = ?");
 				//ps.setString(1, transType);
 				ps.setTimestamp(1, new Timestamp(startDate.getTime()));

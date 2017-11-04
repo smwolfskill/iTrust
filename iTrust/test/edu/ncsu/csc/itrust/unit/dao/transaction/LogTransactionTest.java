@@ -31,7 +31,7 @@ public class LogTransactionTest extends TestCase {
 	}
 
 	public void testGetFilteredTransactions() throws Exception {
-		List<TransactionBean> list = tranDAO.getFilteredTransactions("9", "0", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
+		List<TransactionBean> list = tranDAO.getFilteredTransactions("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
 		assertEquals(9.0, list.get(0).getLoggedInMID()/1e9 );
 		assertTrue( list.get(0).getSecondaryMID()/1e9 < 1e3 );
 		assertEquals(1900, list.get(0).getTransactionType().getCode() );
