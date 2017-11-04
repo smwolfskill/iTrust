@@ -47,14 +47,14 @@ public class FilteredEventLoggingActionTest extends TestCase{
         gen.standardData();
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         Date startDate = new Date(df.parse("06-25-2007").getTime());
-        Date endDate = new Date(df.parse("06-25-2007").getTime());
+        Date endDate = new Date(df.parse("06-26-2007").getTime());
         String url = action.sumTransactionLog("hcp", "patient", startDate, endDate, "1900");
         String expectedURL = "<div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
                 + "3"
                 + "&amp;chxl=0:"
-                + "|2008-06"
+                + "|2007-6"
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year\"></div><div><img src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
                 + "100"
                 + "&amp;chxr=1,0,"
@@ -74,5 +74,7 @@ public class FilteredEventLoggingActionTest extends TestCase{
                 + "&amp;chxl=0:"
                 + "|patient"
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Secondary+User\"></div>";
+        System.out.println(url);
+        assertTrue(url.equals(expectedURL));
     }
 }
