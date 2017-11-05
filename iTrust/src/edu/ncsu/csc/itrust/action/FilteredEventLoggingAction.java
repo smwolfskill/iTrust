@@ -231,7 +231,7 @@ public class FilteredEventLoggingAction {
     public String getDefaultStart(List<TransactionBean> accesses) {
         String startDate = "";
         if (accesses.size() > 0) {
-            startDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(0)
+            startDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(accesses.size() - 1)
                     .getTimeLogged().getTime()));
         } else {
             startDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date());
@@ -249,7 +249,7 @@ public class FilteredEventLoggingAction {
     public String getDefaultEnd(List<TransactionBean> accesses) {
         String endDate = "";
         if (accesses.size() > 0) {
-            endDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(accesses.size() - 1)
+            endDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date(accesses.get(0)
                     .getTimeLogged().getTime()));
         } else {
             endDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date());

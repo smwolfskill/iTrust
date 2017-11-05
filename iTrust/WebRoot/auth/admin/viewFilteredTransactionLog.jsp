@@ -33,19 +33,19 @@
     try {
         Date startDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("startDate")));
         Date endDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("endDate")));
-        System.out.println("start");
+        //System.out.println("start");
         if (request.getParameter("submitSum") != null ) {
-            System.out.println("summmmm");
+         //   System.out.println("summmmm");
             url = action.sumTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
-            System.out.println(url);
+      //      System.out.println(url);
         }
         else {
-            System.out.println("default");
+        //    System.out.println("default");
             accesses = action.viewTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
         }
     } catch (Exception e) {
         //        e.printHTML(pageContext.getOut());
-        System.out.println("exception-null");
+      //  System.out.println("exception-null");
         accesses = action.viewTransactionLog(null, null, null, null, null);
     }
 
@@ -84,7 +84,7 @@
 
     <%
         for(TransactionBean t : accesses) {
-            System.out.println(t.toString());
+        //    System.out.println(t.toString());
             String userRoleString[] = new String[2];
 
             if(t.getLoggedInMID()>1e3)

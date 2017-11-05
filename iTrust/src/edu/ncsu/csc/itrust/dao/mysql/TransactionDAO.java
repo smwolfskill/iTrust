@@ -343,32 +343,32 @@ public class TransactionDAO {
 		if(userRole!=null && !userRole.equals("1000000000")) {
 			String role1 = userRole.equals("hcp") ? ">=" : "<";
 			userRoleCommand = " AND loggedInMID " + role1 + " 9000000000 ";
-			System.out.println(userRoleCommand);
+		//	System.out.println(userRoleCommand);
 		}
 		if(secondaryRole!=null && !secondaryRole.equals("1000000000")) {
 
 			String role2 = secondaryRole.equals("hcp") ? ">=" : "<";
 
 			secondaryRoleCommand = " AND secondaryMID " + role2 + " 9000000000 ";
-			System.out.println(secondaryRoleCommand);
+		//	System.out.println(secondaryRoleCommand);
 		}
 		if(transType!=null && !transType.equals("1000000000")) {
 			transTypeCommand = " AND transactionCode = " + transType;
-			System.out.println(transTypeCommand);
+		//	System.out.println(transTypeCommand);
 		}
 
 		try {
 			conn = factory.getConnection();
 			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null) {
-				System.out.println("all null");
+			//	System.out.println("all null");
 				ps = conn.prepareStatement("SELECT * FROM transactionlog ORDER BY timeLogged DESC");
 			}
 			else {
-				System.out.println(userRole+" ");
-				System.out.println(secondaryRole+"");
-				System.out.println(startDate);
-				System.out.println(endDate);
-				System.out.println(transType);
+			//	System.out.println(userRole+" ");
+			//	System.out.println(secondaryRole+"");
+			//	System.out.println(startDate);
+			//	System.out.println(endDate);
+			//	System.out.println(transType);
 				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE " +
 						"timeLogged >= ? AND timeLogged <= ?" +
 						//"AND loggedInMID"+role1+"9000000000 AND secondaryMID"+role2+"9000000000"+

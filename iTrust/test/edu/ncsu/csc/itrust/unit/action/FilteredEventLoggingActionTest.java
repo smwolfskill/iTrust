@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilteredEventLoggingActionTest extends TestCase{
@@ -18,25 +19,55 @@ public class FilteredEventLoggingActionTest extends TestCase{
     private DAOFactory factory;
     private long mid = 1L;
     TestDataGenerator gen;
+    String todayDate;
+    List<TransactionBean>list;
 
     @Override
     protected void setUp() throws Exception {
         factory = TestDAOFactory.getTestInstance();
         action = new FilteredEventLoggingAction(factory);
         gen = new TestDataGenerator();
+        todayDate = new SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date());
     }
 
     public void testViewTransactionLog() throws Exception {
         gen.clearAllTables();
         gen.standardData();
-        List<TransactionBean> list = action.viewTransactionLog("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2012"), "1900");
+        list = action.viewTransactionLog("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2008"), "1900");
+
         assertTrue( list.get(0).getSecondaryMID()/1e9 < 1e3 );
         assertTrue( list.get(0).getLoggedInMID()/1e9 > 1 );
         assertEquals(1900, list.get(0).getTransactionType().getCode() );
     }
 
+    public void testGetDefaultStart() throws Exception {
+        gen.clearAllTables();
+        gen.standardData();
+        list = action.viewTransactionLog("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2008"), "1900");
+        String result = action.getDefaultStart(list);
+        assertEquals("06/22/2007",result);
+    }
+    public void testGetDefaultEnd() throws Exception {
+        gen.clearAllTables();
+        gen.standardData();
+        list = action.viewTransactionLog("hcp", "patient", new SimpleDateFormat("MM/dd/yyyy").parse("03/03/2003"), new SimpleDateFormat("MM/dd/yyyy").parse("12/31/2008"), "1900");
+        String result = action.getDefaultEnd(list);
+        assertEquals("07/15/2008",result);
+    }
+    public void testGetDefaultStart2() throws Exception {
+        List<TransactionBean> list2 = new ArrayList<TransactionBean>();
+        String result = action.getDefaultStart(list2);
+        assertEquals(todayDate,result);
+    }
+    public void testGetDefaultEnd2() throws Exception {
+        List<TransactionBean> list2 = new ArrayList<TransactionBean>();
+        String result = action.getDefaultEnd(list2);
+        assertEquals(todayDate, result);
+    }
+
     public void testSumTransactionLog1() throws Exception{
         gen.clearAllTables();
+        //gen.standardData();
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         Date startDate = new Date(df.parse("01-01-2001").getTime());
         Date endDate = new Date(df.parse("01-01-2010").getTime());
