@@ -54,6 +54,8 @@
 			<li><a href="/iTrust/auth/admin/sessionTimeout.jsp">Change Global Session Timeout </a></li>
 			<li><a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a></li>
 			<li><a href="/iTrust/auth/admin/activatePatient.jsp">Activate Patient</a></li>
+			<li><a href="/iTrust/auth/admin/sendReminders.jsp">Send Reminders</a></li>
+			<li><a href="/iTrust/auth/admin/messageOutbox.jsp">Reminders Outbox</a></li>
 		</ul>
 	</div>
 </div>
