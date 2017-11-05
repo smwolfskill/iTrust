@@ -1,9 +1,17 @@
 package edu.ncsu.csc.itrust.action;
 
+import com.sun.jna.platform.win32.Sspi;
+import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
 import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Handles retrieving the log of record accesses for a given user Used by viewAccessLog.jsp
@@ -37,4 +45,6 @@ public class EventLoggingAction {
 			throws DBException {
 		this.transDAO.logTransaction(type, loggedInMID, secondaryMID, addedInfo);
 	}
+
 }
+

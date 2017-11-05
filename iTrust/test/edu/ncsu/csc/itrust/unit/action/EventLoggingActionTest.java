@@ -13,6 +13,7 @@ import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 import junit.framework.TestCase;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class EventLoggingActionTest extends TestCase {
@@ -49,4 +50,5 @@ public class EventLoggingActionTest extends TestCase {
 			fail();
 		}
 	}
+
 }
