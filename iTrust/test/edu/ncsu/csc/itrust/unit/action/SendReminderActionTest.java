@@ -40,6 +40,12 @@ public class SendReminderActionTest extends TestCase {
 		this.srAction = new SendReminderAction(this.factory, this.hcpId);
 	}
 
+	public void testSendReminderAction() throws ITrustException
+	{
+		int numberOfAppts = srAction.sendReminderForAppointments(10);
+		assertEquals(8,numberOfAppts);
+	}
+
 	public void testSendReminder() throws ITrustException, SQLException, FormValidationException {
 		ApptBean aBean = new ApptBean();
 

@@ -43,13 +43,14 @@ public class SendReminderAction {
         smAction.sendMessage(message);
     }
 
-    public void sendReminderForAppointments(int numDays) throws ITrustException {
+    public int sendReminderForAppointments(int numDays) throws ITrustException {
         List<ApptBean> appointments = null;
         try {
             appointments = apptDAO.getUpcomingAppts(numDays);
             for (ApptBean appt : appointments) {
                 sendReminder(appt);
             }
+            return appointments.size();
         } catch (DBException e) {
             throw new ITrustException("DB Error in sending reminders.");
         } catch (SQLException e) {
