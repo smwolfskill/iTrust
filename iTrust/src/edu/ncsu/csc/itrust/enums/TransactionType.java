@@ -9,6 +9,8 @@ package edu.ncsu.csc.itrust.enums;
  * PatientViewable -- boolean for if the action will be displayed in the patient activity feed
  */
 public enum TransactionType {
+	/**SEND_REMINDER: Added for UC41*/
+	SEND_REMINDER(5001, "Send reminders", " sent reminders to patients with upcoming appointments", true),
 	/**LOGIN_FAILURE*/
 	LOGIN_FAILURE(1, "Failed login", "tried to authenticate unsuccessfully", true),
 	/**HOME_VIEW*/

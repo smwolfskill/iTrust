@@ -43,7 +43,9 @@ public class SendReminderActionTest extends TestCase {
 	public void testSendReminderAction() throws ITrustException
 	{
 		int numberOfAppts = srAction.sendReminderForAppointments(10);
-		assertEquals(8,numberOfAppts);
+		assertTrue(numberOfAppts >= 5);
+		/* Cannot use 8 appts. b/c flaky: relies on current day of month.
+		 * In DB only 5 are guaranteed to be created ALWAYS within 10 days from now. */
 	}
 
 	public void testSendReminder() throws ITrustException, SQLException, FormValidationException {

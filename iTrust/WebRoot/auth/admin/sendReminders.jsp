@@ -20,7 +20,7 @@
             if(numDays > 0) {
                 SendReminderAction sendReminder = new SendReminderAction(prodDAO, loggedInMID.longValue());
                 sendReminder.sendReminderForAppointments(numDays);
-                loggingAction.logEvent(TransactionType., loggedInMID.longValue(), 0,
+                loggingAction.logEvent(TransactionType.SEND_REMINDER, loggedInMID.longValue(), 0,
                         "Sent reminders to patients with appointments within " + numDays + ".");
 %>
                 <div align=center>
