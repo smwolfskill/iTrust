@@ -6,6 +6,7 @@ import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
+import edu.ncsu.csc.itrust.enums.Role;
 import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
@@ -39,7 +40,6 @@ public class FilteredEventLoggingAction {
     public List<TransactionBean> viewTransactionLog(String userRole, String secondaryRole, java.util.Date startDate, java.util.Date endDate, String transType){
 
         List<TransactionBean> accesses; //stores the log entries
-//        List<PersonnelBean> dlhcps;
         try {
             accesses = transDAO.getFilteredTransactions(userRole, secondaryRole, startDate, endDate, transType);
             return accesses;
@@ -47,56 +47,16 @@ public class FilteredEventLoggingAction {
             System.out.println(e.getExtendedMessage());
             return null;
         }
-
-        //get the medical dependents for a signed in user. If the selected user is not the
-        //signed in user or one of the dependents, then the user doesn't have access to the log
-//        List<PatientBean> patientRelatives = getRepresented(loggedInMID);
-//
-//
-//        dlhcps = patientDAO.getDeclaredHCPs(mid);
-//
-//        boolean midInScope = false;
-//        for (PatientBean pb : patientRelatives) {
-//            if (pb.getMID() == mid)
-//                midInScope = true;
-//        }
-//        if (mid != loggedInMID && !midInScope) { //the selected user in the form is out of scope and can't be shown to the user
-//            throw new FormValidationException("Log to View.");
-//        }
-//
-//        //user has either 0 or 1 DLHCP's. Get one if exists so it can be filtered from results
-//        long dlhcpID = -1;
-//        if(!dlhcps.isEmpty())
-//            dlhcpID = dlhcps.get(0).getMID();
-//
-//        if (startDate == null || endDate == null)
-//            return transDAO.getAllRecordAccesses(mid, dlhcpID, getByRole);
-//
-//        try {
-//			/*the way the Date class works, is if you enter more months, or days than
-//			 is allowed, it will simply mod it, and add it all together. To make sure it
-//			 matches MM/dd/yyyy, I am going to use a Regular Expression
-//			 */
-//            //month can have 1 or 2 digits, same with day, and year must have 4
-//            Pattern p = Pattern.compile("[0-9]{1,2}?/[0-9]{1,2}?/[0-9]{4}?");
-//            Matcher m = p.matcher(endDate);
-//            Matcher n = p.matcher(startDate);
-//            //if it fails to match either of them, throw the form validation exception
-//            if (!m.matches() || !n.matches()) {
-//                throw new FormValidationException("Enter dates in MM/dd/yyyy");
-//            }
-//
-//            java.util.Date lower = new SimpleDateFormat("MM/dd/yyyy").parse(lostartDatewerDate);
-//            java.util.Date upper = new SimpleDateFormat("MM/dd/yyyy").parse(endDate);
-//
-//            if (lower.after(upper))
-//                throw new FormValidationException("Start date must be before end date!");
-//            accesses = transDAO.getRecordAccesses(mid, dlhcpID, lower, upper, getByRole);
-//        } catch (ParseException e) {
-//            throw new FormValidationException("Enter dates in MM/dd/yyyy");
-//        }
     }
 
+
+    public Role getUserRole(final long mid) {
+        try {
+            return this.authDAO.getUserRole(mid);
+        } catch (ITrustException e) {
+            return null;
+        }
+    }
     /*
     userRole: "all" for all, role otherwise
     secondaryRole: "all" for all, role otherwise
