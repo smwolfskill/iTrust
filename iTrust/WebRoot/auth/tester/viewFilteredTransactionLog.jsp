@@ -5,6 +5,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="edu.ncsu.csc.itrust.enums.Role" %>
 
 <%@include file="/global.jsp"%>
 
@@ -29,8 +30,10 @@
     Date startDate = null;
     Date endDate = null;
     try {
-        startDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("startDate")));
-        endDate = (new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("endDate")));
+        String startDateString = request.getParameter("startDate");
+        startDate = ("".equals(startDateString) || startDateString == null) ? null : (new SimpleDateFormat("MM/dd/yyyy").parse(startDateString));
+        String endDateString = request.getParameter("endDate");
+        endDate = ("".equals(endDateString) || endDateString == null) ? null : (new SimpleDateFormat("MM/dd/yyyy").parse(endDateString));
         if (request.getParameter("submitSum") != null ) {
             url = action.sumTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
         }
@@ -38,10 +41,13 @@
             accesses = action.viewTransactionLog(request.getParameter("userRole"), request.getParameter("secondaryRole"), startDate, endDate, request.getParameter("transactionType"));
         }
     } catch (Exception e) {
+        System.out.println(e.getStackTrace());
         accesses = action.viewTransactionLog(null, null, null, null, null);
     }
     String displayStartDate = (startDate == null) ? "":new SimpleDateFormat("MM/dd/yyyy").format(startDate);
     String displayEndDate = (endDate == null)? "":new SimpleDateFormat("MM/dd/yyyy").format(endDate);
+    String userRoleSelect = request.getParameter("userRole");
+    String secondaryRoleSelect = request.getParameter("secondaryRole");
 
 %>
 <form action="viewFilteredTransactionLog.jsp" id="logRoleSelectionForm" method="post">
@@ -53,18 +59,30 @@
             <tr class="subHeader">
                 <td>View log for: </td>
                 <td>
-                    <select name="userRole" id="userRoleSelectMenu">
-                        <option value="1000000000"> All</option>
-                        <option value="hcp"> Doctor</option>
-                        <option value="patient"> Patient</option>
+                    <label for="userRoleSelectMenu">User Role</label>
+                    <select name="userRole" id="userRoleSelectMenu" selected = "<%= StringEscapeUtils.escapeHtml("" + (userRoleSelect)) %>">
+                        <option value="all"> All</option>
+                        <%
+                            for( Role role: Role.values()) {
+                        %>
+                        <option value="<%= role.getUserRolesString() %>" <%if(role.getUserRolesString().equals(userRoleSelect)){%>selected<%}%> ><%= role.getUserRolesString() %></option>
+                        <%
+                            }
+                        %>
 
                     </select>
                 </td>
                 <td>
+                    <label for="secondaryRoleSelectMenu">Secondary Role</label>
                     <select name="secondaryRole" id="secondaryRoleSelectMenu">
-                        <option value="1000000000"> All</option>
-                        <option value="hcp"> Doctor</option>
-                        <option value="patient"> Patient</option>
+                        <option value="all"> All</option>
+                        <%
+                            for( Role role: Role.values()) {
+                        %>
+                        <option value="<%= role.getUserRolesString() %>" <%if(role.getUserRolesString().equals(secondaryRoleSelect)){%>selected<%}%>><%= role.getUserRolesString() %></option>
+                        <%
+                            }
+                        %>
 
                     </select>
                 </td>
@@ -85,11 +103,11 @@
                 <td>Transaction Type:</td>
                 <td>
                     <select name="transactionType" id="transactionTypeSelectMenu">
-                        <option value="1000000000"> All</option>
+                        <option value="all"> All</option>
                         <%
                             for( TransactionType transactionType: TransactionType.values()) {
                         %>
-                        <option value="<%= transactionType.getCode() %>"><%= transactionType.getCode() %></option>
+                        <option value="<%= transactionType.getCode() %>" ><%= transactionType.name() %></option>
                         <%
                             }
                         %>
@@ -136,41 +154,22 @@
 
     <%
         for(TransactionBean t : accesses) {
-            //    System.out.println(t.toString());
             String userRoleString[] = new String[2];
-
-            if(t.getLoggedInMID()>1e3)
-                userRoleString[0] = "Doctor";
-            else
-                userRoleString[0] = "Patient";
-
-            if(t.getSecondaryMID()>1e3)
-                userRoleString[1] = "Doctor";
-            else
-                userRoleString[1] = "Patient";
-
-
+            userRoleString[0] = action.getUserRole(t.getLoggedInMID()).getUserRolesString();
+            Role secondUserRole = action.getUserRole(t.getSecondaryMID());
+            userRoleString[1] = (secondUserRole == null) ? "N/A" : secondUserRole.getUserRolesString();
     %>
+
     <tr>
         <td ><%= StringEscapeUtils.escapeHtml("" + (t.getTimeLogged())) %></td>
         <td ><%= StringEscapeUtils.escapeHtml("" + (userRoleString[0]))%></td>
-
-        <td><%= StringEscapeUtils.escapeHtml("" + (userRoleString[1])) %></td>
-        <td ><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().getActionPhrase())) %></td>
+        <td ><%= StringEscapeUtils.escapeHtml("" + (userRoleString[1])) %></td>
+        <td ><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().name())) %></td>
         <td ><%= StringEscapeUtils.escapeHtml("" + (t.getAddedInfo())) %></td>
     </tr>
     <%
             }
         }
-
-        /*String startDate = action.getDefaultStart(accesses);
-        String endDate = action.getDefaultEnd(accesses);
-        if("role".equals(request.getParameter("sortBy"))) {
-            startDate = request.getParameter("startDate");
-            endDate = request.getParameter("endDate");
-        }*/
-
-
 
     %>
 </table>
