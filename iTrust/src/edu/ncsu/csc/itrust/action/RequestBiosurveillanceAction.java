@@ -41,7 +41,11 @@ public class RequestBiosurveillanceAction {
         if (diag == null) {
             return "<div>Invalid diagnosis code. Please try again!</div>";
         }
-        if (zipCode == null || 10000 > Integer.valueOf(zipCode) || 99999 < Integer.valueOf(zipCode)) {
+        try {
+            if (zipCode == null || 10000 > Integer.valueOf(zipCode) || 99999 < Integer.valueOf(zipCode)) {
+                return "<div>Invalid zip code. Please try again!</div>";
+            }
+        } catch(NumberFormatException e) {
             return "<div>Invalid zip code. Please try again!</div>";
         }
         if (date == null) {
