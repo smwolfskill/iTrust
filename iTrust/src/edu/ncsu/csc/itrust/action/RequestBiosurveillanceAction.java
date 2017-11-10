@@ -7,7 +7,6 @@ import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -33,10 +32,14 @@ public class RequestBiosurveillanceAction {
                 throw new FormValidationException("invalid zip code");
             if (Integer.valueOf(zipCode)<10000 || Integer.valueOf(zipCode)>99999)
                 throw new FormValidationException("length should exactly equal to 5");
-        } catch (Exception e) { return "invalid zip code"; }
+        } catch (FormValidationException e) { return "invalid zip code"; }
 
+         /* Check icdCode validation */
         try {
-            Integer.parseInt(icdCode);
+            if(icdCode.contains("."))
+                Double.parseDouble(icdCode);
+            else
+                Integer.parseInt(icdCode);
         } catch (Exception e) { return "invalid diagnosis code"; }
 
         try {
@@ -48,11 +51,11 @@ public class RequestBiosurveillanceAction {
 
         switch (icdCode) {
             case "84.50":
-                return isMalaria(diagnosisStatisticsBean, threshold)?"Yes":"No";
+                return isMalariaEpidemic(diagnosisStatisticsBean, threshold)?"Yes":"No";
             case "487.00":
                 return isInfluenzaEpidemic(diagnosisStatisticsBean)?"Yes":"No";
             default:
-                return "No analysis can occur.";
+                return "No analysis can occur";
         }
     }
 
@@ -62,18 +65,67 @@ public class RequestBiosurveillanceAction {
         return (date.getTime() - startDateOfYear.getTime())/(1000 * 60 * 60 * 24 * 7) + 1;
     }
 
-    private boolean isMalaria(ArrayList<DiagnosisStatisticsBean> diagnosisStatisticsBean, double threshold) {
-        return true;
+    private boolean isMalariaEpidemic(ArrayList<DiagnosisStatisticsBean> diagnosisStatistics, double threshold) throws DBException {
+        if (diagnosisStatistics.size()<2)
+            return false;
+
+        Date earliest = diagDAO.findEarliestIncident("84.");
+        double [] average;
+        if(earliest != null) {
+            double yearCount = 0;
+            long[] diagnosisCount = new long[]{0, 0};
+            if (!isEarlierMonth(earliest, diagnosisStatistics.get(0).getStartDate())) {
+                earliest.setYear(earliest.getYear() + 1);
+            }
+
+            Date startDate = new Date(diagnosisStatistics.get(0).getStartDate().getTime());
+            startDate.setYear(earliest.getYear());
+            Date endDate = new Date(diagnosisStatistics.get(1).getEndDate().getTime());
+            endDate.setYear(earliest.getYear());
+
+            while (startDate.before(diagnosisStatistics.get(0).getStartDate())) {
+
+                ArrayList<DiagnosisStatisticsBean> yearResult = diagDAO.getWeeklyCounts("84.50", diagnosisStatistics.get(0).getZipCode(), startDate, endDate);
+                startDate.setYear(startDate.getYear() + 1);
+                endDate.setYear(endDate.getYear() + 1);
+
+                yearCount++;
+                for (int i = 0; i < yearResult.size(); i++) {
+                    diagnosisCount[i] += yearResult.get(i).getRegionStats();
+                }
+            }
+            if(yearCount == 0) { // date we're checking is before first case of malaria, so can't be epidemic
+                return false;
+            }
+
+            // calculate the average
+            average = new double[] { diagnosisCount[0]/yearCount, diagnosisCount[1]/yearCount };
+        } else { // no cases on record
+            average = new double[] {0., 0.};
+        }
+
+
+        if(diagnosisStatistics.get(0).getRegionStats() > threshold * average[0])
+            if(diagnosisStatistics.get(1).getRegionStats() > threshold * average[1])
+                return true;
+
+        return false;
     }
 
-    private boolean isInfluenzaEpidemic(ArrayList<DiagnosisStatisticsBean> diagnosisStatisticsBean) {
+    private boolean isEarlierMonth (Date first, Date second) {
+        return weekNumber(first) <= weekNumber(second);
+    }
 
-        long regionCount = diagnosisStatisticsBean.get(0).getRegionStats();
+    private boolean isInfluenzaEpidemic(ArrayList<DiagnosisStatisticsBean> diagnosisStatistics) {
+        if (diagnosisStatistics.size()<2)
+            return false;
 
-        if(regionCount > calcThreshold(weekNumber(diagnosisStatisticsBean.get(0).getStartDate())))
+        long regionCount = diagnosisStatistics.get(0).getRegionStats();
+
+        if(regionCount > calcThreshold(weekNumber(diagnosisStatistics.get(0).getStartDate())))
         {
-            regionCount = diagnosisStatisticsBean.get(1).getRegionStats();
-            if(regionCount > calcThreshold(weekNumber(diagnosisStatisticsBean.get(1).getStartDate()))){
+            regionCount = diagnosisStatistics.get(1).getRegionStats();
+            if(regionCount > calcThreshold(weekNumber(diagnosisStatistics.get(1).getStartDate()))){
                 return true;
             }
         }
