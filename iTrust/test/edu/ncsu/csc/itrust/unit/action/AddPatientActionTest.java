@@ -12,6 +12,9 @@ import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AddPatientActionTest extends TestCase {
 	private DAOFactory factory = TestDAOFactory.getTestInstance();
 	private TestDataGenerator gen;
@@ -52,5 +55,17 @@ public class AddPatientActionTest extends TestCase {
 		newMID = action.addPatient(p);
 		assertEquals(p.getMID(), newMID);
 		assertFalse(authDAO.isDependent(newMID));
+	}
+
+	public void testAddPreRegisterPatient() throws Exception {
+		PatientBean p = new PatientBean();
+		p.setFirstName("Jiminy");
+		p.setLastName("Cricket");
+		p.setEmail("make.awish@gmail.com");
+
+
+		long newMID = action.addPreRegisteredPatient(p);
+		assertEquals(p.getMID(), newMID);
+		assertEquals(p.getDateOfDeactivationStr(),new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 	}
 }
