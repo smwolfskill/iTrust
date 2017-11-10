@@ -90,8 +90,8 @@ public class RequestBiosurveillanceActionTest extends TestCase {
         //Test 4: Show threshold yields correct results: still epidemic for < 5
         assertEquals("Yes", action.detectEpidemic(MALARIA, "27606",
                 presentCases , 4.9));
-        assertEquals("Yes", action.detectEpidemic(MALARIA, "27606",
-                presentCases , 5.0));
+        assertEquals("No", action.detectEpidemic(MALARIA, "27606",
+                presentCases , 6.0));
 
     }
 
