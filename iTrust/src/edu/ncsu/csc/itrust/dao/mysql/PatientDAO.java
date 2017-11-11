@@ -686,7 +686,7 @@ public class PatientDAO {
 	/**
 	 * Removes all dependencies participated by the patient passed in the parameter
 	 * 
-	 * @param representerMID the mid for the patient to remove all representees for
+	 * @param representeeMID the mid for the patient to remove all representees for
 	 * @throws DBException
 	 */
 	public void removeAllRepresentee(long representeeMID) throws DBException {
@@ -1196,6 +1196,46 @@ public class PatientDAO {
 			int numDeleted = ps.executeUpdate();
 			ps.close();
 			return numDeleted;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+
+	public List<List<String>> getCommonDeaths(long HCPID, String gender, int startYear, int endYear)
+			throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT Code, Description, COUNT(DISTINCT(MID)) AS quantity " +
+					"FROM patients " +
+					"JOIN officevisits ON patients.MID = officevisits.PatientID " +
+					"JOIN icdcodes ON patients.CauseOfDeath = icdcodes.Code " +
+					"WHERE (officevisits.HCPID = ? OR ?) " +
+					"AND YEAR(patients.DateOfDeath) >= ? " +
+					"AND YEAR(patients.DateOfDeath) <= ? " +
+					"AND (patients.gender = ? OR ?) " +
+					"GROUP BY Code, Description " +
+					"ORDER BY quantity DESC " +
+					"LIMIT 2");
+			ps.setLong(1, HCPID);
+			ps.setBoolean(2, HCPID == -1);
+			ps.setInt(3, startYear);
+			ps.setInt(4, endYear);
+			ps.setString(5, gender);
+			ps.setBoolean(6, "All".equals(gender));
+			ResultSet rs = ps.executeQuery();
+			List<List<String>> ret = new ArrayList<>();
+			while(rs.next()) {
+				List<String> temp = new ArrayList<>();
+				temp.add(rs.getString("Code"));
+				temp.add(rs.getString("Description"));
+				temp.add(rs.getString("quantity"));
+				ret.add(temp);
+			}
+			return ret;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		} finally {
