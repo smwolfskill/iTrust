@@ -4,6 +4,7 @@
 
 package edu.ncsu.csc.itrust.unit.action;
 
+import edu.ncsu.csc.itrust.dao.mysql.PreRegisterDAO;
 import junit.framework.TestCase;
 import edu.ncsu.csc.itrust.action.AddPatientAction;
 import edu.ncsu.csc.itrust.beans.PatientBean;
@@ -58,14 +59,15 @@ public class AddPatientActionTest extends TestCase {
 	}
 
 	public void testAddPreRegisterPatient() throws Exception {
+		PreRegisterDAO preRegisterDAO = factory.getPreRegisterDAO();
+
+		//Add a dependent
 		PatientBean p = new PatientBean();
 		p.setFirstName("Jiminy");
 		p.setLastName("Cricket");
 		p.setEmail("make.awish@gmail.com");
-
-
-		long newMID = action.addPreRegisteredPatient(p);
-		assertEquals(p.getMID(), newMID);
-		assertEquals(p.getDateOfDeactivationStr(),new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+		long mid = action.addPreRegisteredPatient(p,10,10,0);
+		assertEquals(p.getMID(),mid);
+		assertTrue(preRegisterDAO.checkPreregisteredPatient(mid));
 	}
 }

@@ -1203,42 +1203,6 @@ public class PatientDAO {
 		}
 	}
 
-	public boolean isPreRegisteredPatient(long pid) throws ITrustException
-	{
-		Connection conn = null;
-		PreparedStatement ps = null;
 
-		boolean isPreRegister = false;
-		long addedMID;
-		try {
-
-			boolean isActive = checkIfPatientIsActive(pid);
-			if(isActive)
-			{
-				return false;
-			}
-			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM historypatients WHERE mid=?");
-			ps.setLong(1, pid);
-			ResultSet rs;
-			rs = ps.executeQuery();
-			while(rs.next())
-			{
-				addedMID = rs.getLong(3);
-				if(addedMID == factory.getPersonnelDAO().searchForPersonnelWithName("Shape", "Shifter").get(0).getMID())
-				{
-					isPreRegister = true;
-				}
-			}
-			rs.close();
-			ps.close();
-		} catch (SQLException e) {
-
-			throw new DBException(e);
-		} finally {
-			DBUtil.closeConnection(conn, ps);
-		}
-		return isPreRegister;
-	}
 	
 }

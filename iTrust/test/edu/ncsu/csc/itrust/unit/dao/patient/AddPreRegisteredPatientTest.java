@@ -1,6 +1,7 @@
 package edu.ncsu.csc.itrust.unit.dao.patient;
 
 import edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO;
+import edu.ncsu.csc.itrust.dao.mysql.PreRegisterDAO;
 import junit.framework.TestCase;
 import edu.ncsu.csc.itrust.beans.PatientBean;
 import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
@@ -13,6 +14,7 @@ public class AddPreRegisteredPatientTest extends TestCase
     private TestDataGenerator gen = new TestDataGenerator();
     private PatientDAO patientDAO = TestDAOFactory.getTestInstance().getPatientDAO();
     private PersonnelDAO personnelDAO = TestDAOFactory.getTestInstance().getPersonnelDAO();
+    private PreRegisterDAO preRegisterDAO = TestDAOFactory.getTestInstance().getPreRegisterDAO();
 
     protected void setUp() throws Exception {
         gen.clearAllTables();
@@ -21,24 +23,28 @@ public class AddPreRegisteredPatientTest extends TestCase
 
     public void testPosPreregisterPatient() throws Exception
     {
+        PatientBean p = new PatientBean();
+        p.setFirstName("John");
+        p.setLastName("Doe");
+        p.setEmail("abc@xyz.com");
         long pid = patientDAO.addEmptyPatient();
-        PatientBean p = patientDAO.getPatient(pid);
-        p.setDateOfDeactivationStr("01/01/2017");
-        patientDAO.editPatient(p,personnelDAO.searchForPersonnelWithName("Shape","Shifter").get(0).getMID());
+        patientDAO.editPatient(p,pid);
 
-        assertTrue(patientDAO.isPreRegisteredPatient(pid));
+        preRegisterDAO.addPreregisterPatient(pid,10,10,0);
+
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid));
     }
-    public void testNegPreRegisterPatient() throws Exception
+
+    public void testNEgPreregisterPatient() throws Exception
     {
+        PatientBean p = new PatientBean();
+        p.setFirstName("John");
+        p.setLastName("Doe");
+        p.setEmail("abc@xyz.com");
         long pid = patientDAO.addEmptyPatient();
-        PatientBean p = patientDAO.getPatient(pid);
+        patientDAO.editPatient(p,pid);
 
-        patientDAO.editPatient(p,9000000003L);
-
-        assertFalse(patientDAO.isPreRegisteredPatient(pid));
-        p.setDateOfDeactivationStr("01/01/2017");
-        assertFalse(patientDAO.isPreRegisteredPatient(pid));
-
+        assertFalse(preRegisterDAO.checkPreregisteredPatient(pid));
     }
 
 }
