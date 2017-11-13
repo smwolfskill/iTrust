@@ -797,3 +797,11 @@ CREATE TABLE IF NOT EXISTS opdiagnosis(
 	ICDCode DECIMAL( 5, 2 ) NOT NULL COMMENT 'Code for the Diagnosis',
     URL VARCHAR(512) COMMENT 'URL for information'
 ) ENGINE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS PreRegisteredPatients
+(
+  MID BIGINT unsigned,
+  Height float default '0',
+	Weight float default '0',
+	Smoker tinyint(1) NOT NULL default '0' COMMENT 'Is the person a smoker'
+) ENGINE=MyISAM;
