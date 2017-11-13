@@ -198,7 +198,7 @@
             String smoker = request.getParameter("smoker");
 
             try {
-                if (pass != null && confirmPass != null && pass.equals(confirmPass)) {
+                if (pass != null && !pass.equals("") && pass.equals(confirmPass)) {
                     returnMessage = "Account pre-registered.";
                     PatientBean p = new PatientBean();
 
@@ -208,44 +208,44 @@
                     p.setPassword(pass);
                     p.setConfirmPassword(confirmPass);
 
-                    if (address1 != null) {
+                    if (!address1.equals("")) {
                         p.setStreetAddress1(address1);
                     }
-                    if (address2 != null) {
+                    if (!address2.equals("")) {
                         p.setStreetAddress2(address2);
                     }
-                    if (city != null) {
+                    if (!city.equals("")) {
                         p.setCity(city);
                     }
-                    if (state != null) {
+                    if (!state.equals("")) {
                         p.setState(state);
                     }
-                    if (zip != null) {
+                    if (!zip.equals("")) {
                         p.setZip(zip);
                     }
-                    if (phone != null) {
+                    if (!phone.equals("")) {
                         p.setPhone(phone);
                     }
 
-                    if (icName != null) {
+                    if (!icName.equals("")) {
                         p.setIcName(icName);
                     }
-                    if (icAddress1 != null) {
+                    if (!icAddress1.equals("")) {
                         p.setIcAddress1(icAddress1);
                     }
-                    if (icAddress2 != null) {
+                    if (!icAddress2.equals("")) {
                         p.setIcAddress2(icAddress2);
                     }
-                    if (icCity != null) {
+                    if (!icCity.equals("")) {
                         p.setIcCity(icCity);
                     }
-                    if (icState != null) {
+                    if (!icState.equals("")) {
                         p.setIcState(icState);
                     }
-                    if (icZip != null) {
+                    if (!icZip.equals("")) {
                         p.setIcZip(icZip);
                     }
-                    if (icPhone != null) {
+                    if (!icPhone.equals("")) {
                         p.setIcPhone(icPhone);
                     }
 
@@ -255,7 +255,7 @@
                     AddPatientAction addAction = new AddPatientAction(prodDAO, adminMID);
                     long pid = addAction.addPreRegisteredPatient(p, height, weight, smoker);
                     loggingAction.logEvent(TransactionType.PATIENT_CREATE, pid, 0, "");
-                } else if (pass != null && confirmPass != null) {
+                } else if (pass != null && !pass.equals("") && !confirmPass.equals("")) {
                     returnMessage = "Password does not match.";
                     color = "red";
                 }
