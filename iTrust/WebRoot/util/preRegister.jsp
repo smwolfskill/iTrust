@@ -261,7 +261,7 @@
                     color = "red";
                 }
         %>
-        <span style="color: <%=color%>"><b><i><%= returnMessage %></i></b></span><br />
+        <span style="color: <%=color%>"><b><i id="returnMessage"><%= returnMessage %></i></b></span><br />
         <%
             } catch (FormValidationException e) {
                 e.printHTML(pageContext.getOut());

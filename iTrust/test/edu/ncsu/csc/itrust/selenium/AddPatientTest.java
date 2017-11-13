@@ -4,12 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class AddPatientTest extends iTrustSeleniumTest{
 	
 	protected WebDriver driver;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -86,5 +89,24 @@ public class AddPatientTest extends iTrustSeleniumTest{
 		driver.findElement(By.xpath("//input[@name='email']")).sendKeys("---@---.com");
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 		assertFalse(driver.findElement(By.xpath("//body")).getText().contains("This form has not been validated correctly."));
+	}
+
+	public void testPreRegisteredPatient() throws Exception {
+		HtmlUnitDriver htmlDriver = new HtmlUnitDriver();
+		htmlDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		htmlDriver.get("http://localhost:8080/iTrust/");
+
+		//Click the pre-register link
+		htmlDriver.findElement(By.linkText("Pre-Register")).click();
+		assertEquals("iTrust - Pre-Register", htmlDriver.getTitle());
+
+		//Enter in information but invalid email
+		htmlDriver.findElement(By.xpath("//input[@name='firstName']")).sendKeys("John");
+		htmlDriver.findElement(By.xpath("//input[@name='lastName']")).sendKeys("Doe");
+		htmlDriver.findElement(By.xpath("//input[@name='email']")).sendKeys("---@---.com");
+		htmlDriver.findElement(By.xpath("//input[@name='password']")).sendKeys("abc123");
+		htmlDriver.findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("abc123");
+		htmlDriver.findElement(By.xpath("//input[@type='submit']")).click();
+		assertTrue(htmlDriver.findElement(By.id("#returnMessage")).getText().contains("Account pre-registered."));
 	}
 }
