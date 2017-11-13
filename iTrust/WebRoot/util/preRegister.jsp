@@ -250,10 +250,8 @@
                     }
 
                     // Validate the form data
-                    PatientValidator validator = new PatientValidator();
-                    validator.validate(p);
-                    AddPatientAction addAction = new AddPatientAction(prodDAO, adminMID);
-                    long pid = addAction.addPreRegisteredPatient(p, height, weight, smoker);
+                    new PatientValidator().validate(p);
+                    long pid = new AddPatientAction(prodDAO, adminMID).addPreRegisteredPatient(p, height, weight, smoker);
                     loggingAction.logEvent(TransactionType.PATIENT_CREATE, pid, 0, "");
                 } else if (pass != null && !pass.equals("") && !confirmPass.equals("")) {
                     returnMessage = "Password does not match.";
