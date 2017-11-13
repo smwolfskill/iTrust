@@ -1,6 +1,9 @@
-<%@page import="edu.ncsu.csc.itrust.action.AddPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
+<%@ page import="edu.ncsu.csc.itrust.beans.PatientBean" %>
+<%@ page import="edu.ncsu.csc.itrust.action.*" %>
+<%@ page import="edu.ncsu.csc.itrust.validate.PatientValidator" %>
+<%@ page import="edu.ncsu.csc.itrust.dao.mysql.PatientDAO" %>
 
 <%@include file="/global.jsp"%>
 
@@ -12,15 +15,8 @@
 
 <h1>Pre-Register</h1>
 <%
-    AddPatientAction action = new AddPatientAction(prodDAO, prodDAO.getPersonnelDAO().searchForPersonnelWithName("Shape", "Shifter").get(0).getMID());
-
-    /*long mid = action.checkMID(request.getParameter("mid"));
-    String role = null;
-
-    try {
-        role = action.checkRole(mid, request.getParameter("role"));
-    } catch (ITrustException e) {
-    }*/
+    PatientDAO patientDAO = prodDAO.getPatientDAO();
+    long adminMID = prodDAO.getPersonnelDAO().searchForPersonnelWithName("Shape", "Shifter").get(0).getMID();
 %>
 
 <form action="/iTrust/util/preRegister.jsp" method="post">
@@ -29,9 +25,15 @@
             <td colspan=2><b>Please enter your information</b></td>
         </tr>
         <tr>
-            <td>Name:</td>
+            <td>First Name:</td>
             <td>
-                <input type=TEXT name="name" required>
+                <input type=TEXT name="firstName" required>
+            </td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td>
+                <input type=TEXT name="lastName" required>
             </td>
         </tr>
         <tr>
@@ -53,9 +55,37 @@
             </td>
         </tr>
         <tr>
-            <td>Address:</td>
+            <td>Contact Information</td>
+            <td><hr></td>
+        </tr>
+        <tr>
+            <td>Street Address 1:</td>
             <td>
-                <input type="text" name="address">
+                <input type="text" name="address1">
+            </td>
+        </tr>
+        <tr>
+            <td>Street Address 2:</td>
+            <td>
+                <input type="text" name="address2">
+            </td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>
+                <input type="text" name="city">
+            </td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td>
+                <input type="text" name="state">
+            </td>
+        </tr>
+        <tr>
+            <td>ZIP Code:</td>
+            <td>
+                <input type="text" name="zip">
             </td>
         </tr>
         <tr>
@@ -71,19 +101,43 @@
         <tr>
             <td>Provider Name:</td>
             <td>
-                <input type="text" name="insuranceName">
+                <input type="text" name="icName">
             </td>
         </tr>
         <tr>
-            <td>Address:</td>
+            <td>Street Address 1:</td>
             <td>
-                <input type="text" name="insuranceAddress">
+                <input type="text" name="icAddress1">
+            </td>
+        </tr>
+        <tr>
+            <td>Street Address 2:</td>
+            <td>
+                <input type="text" name="icAddress2">
+            </td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>
+                <input type="text" name="icCity">
+            </td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td>
+                <input type="text" name="icState">
+            </td>
+        </tr>
+        <tr>
+            <td>ZIP Code:</td>
+            <td>
+                <input type="text" name="icZip">
             </td>
         </tr>
         <tr>
             <td>Phone:</td>
             <td>
-                <input type="tel" name="insurancePhone">
+                <input type="tel" name="icPhone">
             </td>
         </tr>
         <tr>
@@ -113,6 +167,105 @@
                 <input type="submit" value="Submit">
             </td>
         </tr>
+
+        <%
+            String returnMessage = "";
+            String color = "green";
+
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String email = request.getParameter("email");
+            String pass = request.getParameter("password");
+            String confirmPass = request.getParameter("confirmPassword");
+
+            String address1 = request.getParameter("address1");
+            String address2 = request.getParameter("address2");
+            String city = request.getParameter("city");
+            String state = request.getParameter("state");
+            String zip = request.getParameter("zip");
+            String phone = request.getParameter("phone");
+
+            String icName = request.getParameter("icName");
+            String icAddress1 = request.getParameter("icAddress1");
+            String icAddress2 = request.getParameter("icAddress2");
+            String icCity = request.getParameter("icCity");
+            String icState = request.getParameter("icState");
+            String icZip = request.getParameter("icZip");
+            String icPhone = request.getParameter("icPhone");
+
+            String height = request.getParameter("height");
+            String weight = request.getParameter("weight");
+            String smoker = request.getParameter("smoker");
+
+            try {
+                if (pass != null && confirmPass != null && pass.equals(confirmPass)) {
+                    returnMessage = "Account pre-registered.";
+                    PatientBean p = new PatientBean();
+
+                    p.setFirstName(firstName);
+                    p.setLastName(lastName);
+                    p.setEmail(email);
+                    p.setPassword(pass);
+                    p.setConfirmPassword(confirmPass);
+
+                    if (address1 != null) {
+                        p.setStreetAddress1(address1);
+                    }
+                    if (address2 != null) {
+                        p.setStreetAddress2(address2);
+                    }
+                    if (city != null) {
+                        p.setCity(city);
+                    }
+                    if (state != null) {
+                        p.setState(state);
+                    }
+                    if (zip != null) {
+                        p.setZip(zip);
+                    }
+                    if (phone != null) {
+                        p.setPhone(phone);
+                    }
+
+                    if (icName != null) {
+                        p.setIcName(icName);
+                    }
+                    if (icAddress1 != null) {
+                        p.setIcAddress1(icAddress1);
+                    }
+                    if (icAddress2 != null) {
+                        p.setIcAddress2(icAddress2);
+                    }
+                    if (icCity != null) {
+                        p.setIcCity(icCity);
+                    }
+                    if (icState != null) {
+                        p.setIcState(icState);
+                    }
+                    if (icZip != null) {
+                        p.setIcZip(icZip);
+                    }
+                    if (icPhone != null) {
+                        p.setIcPhone(icPhone);
+                    }
+
+                    // Validate the form data
+                    PatientValidator validator = new PatientValidator();
+                    validator.validate(p);
+                    AddPatientAction addAction = new AddPatientAction(prodDAO, adminMID);
+                    long pid = addAction.addPreRegisteredPatient(p, height, weight, smoker);
+                    loggingAction.logEvent(TransactionType.PATIENT_CREATE, pid, 0, "");
+                } else if (pass != null && confirmPass != null) {
+                    returnMessage = "Password does not match.";
+                    color = "red";
+                }
+        %>
+        <span style="color: <%=color%>"><b><i><%= returnMessage %></i></b></span><br />
+        <%
+            } catch (FormValidationException e) {
+                e.printHTML(pageContext.getOut());
+            }
+        %>
     </table>
 </form>
 
