@@ -198,7 +198,10 @@
             String smoker = request.getParameter("smoker");
 
             try {
-                if (pass != null && !pass.equals("") && pass.equals(confirmPass)) {
+                if (email != null && patientDAO.searchForPatientsWithEmail(email).size() > 0) {
+                    returnMessage = "Email already in use.";
+                    color = "red";
+                } else if (pass != null && !pass.equals("") && pass.equals(confirmPass)) {
                     returnMessage = "Account pre-registered.";
                     PatientBean p = new PatientBean();
 
