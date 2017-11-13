@@ -803,5 +803,5 @@ CREATE TABLE IF NOT EXISTS PreRegisteredPatients
   MID BIGINT unsigned,
   Height float default '0',
 	Weight float default '0',
-	Smoker tinyint(1) NOT NULL default '0' COMMENT 'Is the person a smoker'
+	Smoker tinyint(1) COMMENT 'Is the person a smoker'
 ) ENGINE=MyISAM;
