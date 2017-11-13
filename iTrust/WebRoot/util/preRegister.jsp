@@ -195,14 +195,13 @@
 
             String height = request.getParameter("height");
             String weight = request.getParameter("weight");
-            String smoker = request.getParameter("smoker");
+            String[] smoker = request.getParameterValues("smoker");
 
             try {
                 if (email != null && patientDAO.searchForPatientsWithEmail(email).size() > 0) {
                     returnMessage = "Email already in use.";
                     color = "red";
                 } else if (pass != null && !pass.equals("") && pass.equals(confirmPass)) {
-                    returnMessage = "Account pre-registered.";
                     PatientBean p = new PatientBean();
 
                     p.setFirstName(firstName);
@@ -254,7 +253,8 @@
 
                     // Validate the form data
                     new PatientValidator().validate(p);
-                    long pid = new AddPatientAction(prodDAO, adminMID).addPreRegisteredPatient(p, height, weight, smoker);
+                    long pid = new AddPatientAction(prodDAO, adminMID).addPreRegisteredPatient(p, height, weight, smoker == null ? "0" : "1");
+                    returnMessage = "Account pre-registered. Your MID is " + pid + ".";
                     loggingAction.logEvent(TransactionType.PATIENT_CREATE, pid, 0, "");
                 } else if (pass != null && !pass.equals("") && !confirmPass.equals("")) {
                     returnMessage = "Password does not match.";

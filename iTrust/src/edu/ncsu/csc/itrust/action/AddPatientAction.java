@@ -82,11 +82,11 @@ public class AddPatientAction {
 		new AddPatientValidator().validate(p);
 		long newMID = patientDAO.addEmptyPatient();
 		p.setMID(newMID);
-		p.setDateOfDeactivationStr(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+		String pwd = authDAO.addUser(newMID, Role.PATIENT, p.getPassword());
+		p.setPassword(pwd);
+		p.setConfirmPassword(pwd);
 		patientDAO.editPatient(p,personnelDAO.searchForPersonnelWithName("Shape","Shifter").get(0).getMID());
-
 		preRegisterDAO.addPreregisterPatient(p.getMID(),height,weight,smoker);
-
 		return newMID;
 	}
 }

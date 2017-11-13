@@ -40,6 +40,7 @@ DELETE FROM druginteractions;
 DELETE FROM cptcodes;
 DELETE FROM patients;
 DELETE FROM historypatients;
+DELETE FROM preregisteredpatients;
 DELETE FROM users;
 
 DELETE FROM remotemonitoringdata;
