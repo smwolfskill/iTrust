@@ -108,6 +108,7 @@ public class FilteredEventLoggingActionTest extends TestCase{
                 + "|patient"
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Secondary+User&amp;chts=000000,18,l\"></div>";
         System.out.println(url);
+        System.out.println(expectedURL);
         assertTrue(url.equals(expectedURL));
     }
 }

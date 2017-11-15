@@ -26,7 +26,7 @@ public class RequestBiosurveillanceAction {
     * zipCode: the zip code that the user typed in
     * date: the date the user typed in
     */
-    public String detectEpidemic(String icdCode, String zipCode, Date date) {
+    public String detectEpidemic(String icdCode, String zipCode, Date date, Double threshold) {
         return null;
     }
 
@@ -39,17 +39,17 @@ public class RequestBiosurveillanceAction {
     public String seeTrends(String icdCode, String zipCode, Date date) throws DBException {
         DiagnosisBean diag = icdDAO.getICDCode(icdCode);
         if (diag == null) {
-            return "<div>Invalid diagnosis code. Please try again!</div>";
+            return "Invalid diagnosis code. Please try again!";
         }
         try {
             if (zipCode == null || 10000 > Integer.valueOf(zipCode) || 99999 < Integer.valueOf(zipCode)) {
-                return "<div>Invalid zip code. Please try again!</div>";
+                return "Invalid zip code. Please try again!";
             }
         } catch(NumberFormatException e) {
-            return "<div>Invalid zip code. Please try again!</div>";
+            return "Invalid zip code. Please try again!";
         }
         if (date == null) {
-            return "<div>Invalid date. Please try again!</div>";
+            return "Invalid date. Please try again!";
         }
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -77,15 +77,15 @@ public class RequestBiosurveillanceAction {
         String stateDataString = "";
         String allDataString = "";
         for (int i = 0; i < 8; i++) {
-            regionDataString += stringFromInt(toIntExact(regionDiagBeans.get(i).getRegionStats()), wholeMax) + ",";
-            stateDataString += stringFromInt(toIntExact(stateDiagBeans.get(i).getRegionStats()), wholeMax) + ",";
-            allDataString += stringFromInt(allData.get(i), wholeMax) + ",";
+            regionDataString += formatGraphData(toIntExact(regionDiagBeans.get(i).getRegionStats()), wholeMax) + ",";
+            stateDataString += formatGraphData(toIntExact(stateDiagBeans.get(i).getRegionStats()), wholeMax) + ",";
+            allDataString += formatGraphData(allData.get(i), wholeMax) + ",";
         }
         regionDataString = regionDataString.substring(0, regionDataString.length() - 1);
         stateDataString = stateDataString.substring(0, stateDataString.length() - 1);
         allDataString = allDataString.substring(0, allDataString.length() - 1);
 
-        String result = "<div><img id=\"diagchart\" src=\"https://chart.googleapis.com/chart?cht=bvg" +
+        String result = "<img id=\"diagchart\" src=\"https://chart.googleapis.com/chart?cht=bvg" +
                 "&amp;chs=480x320" +
                 "&amp;chd=t:" +
                 regionDataString +
@@ -100,11 +100,11 @@ public class RequestBiosurveillanceAction {
                 "&amp;chbh=10,2,10" +
                 "&amp;chxt=x,y" +
                 "&amp;chxl=0:|Week+1|Week+2|Week+3|Week+4|Week+5|Week+6|Week+7|Week+8" +
-                "&amp;chtt=Diagnoses+by+Week\"></div>";
+                "&amp;chtt=Diagnoses+by+Week\">";
         return result;
     }
 
-    private String stringFromInt(int num, int max) {
+    private String formatGraphData(int num, int max) {
         return String.valueOf(num * 100 / max);
     }
 }

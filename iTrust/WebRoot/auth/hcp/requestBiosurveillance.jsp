@@ -1,18 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: xiaorui
-  Date: 2017/11/7
-  Time: 下午6:17
-  To change this template use File | Settings | File Templates.
---%>
-<%@page import="edu.ncsu.csc.itrust.action.FilteredEventLoggingAction"%>
-<%@page import="java.util.List"%>
-<%@page import="edu.ncsu.csc.itrust.beans.TransactionBean"%>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
-<%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="edu.ncsu.csc.itrust.enums.Role" %>
 <%@ page import="edu.ncsu.csc.itrust.action.RequestBiosurveillanceAction" %>
 
 <%@include file="/global.jsp"%>
@@ -31,32 +19,58 @@
 
     RequestBiosurveillanceAction action = new RequestBiosurveillanceAction(DAOFactory.getProductionInstance());
 
+    String dateString = "";
     Date date;
 
+    String icdCode = "";
+    String zipCode = "";
+    String thresholdString = "";
+    Double threshold = 0.0;
+
     try {
-        String dateString = request.getParameter("date");
-        date = ("".equals(dateString) || dateString == null) ? null : (new SimpleDateFormat("MM/dd/yyyy").parse(dateString));
+        dateString = request.getParameter("date");
+        dateString = (dateString == null) ? "" : dateString;
+        date = ("".equals(dateString)) ? null : (new SimpleDateFormat("MM/dd/yyyy").parse(dateString));
     } catch (Exception e) {
         date = null;
     }
+
+    try {
+        thresholdString = request.getParameter("threshold");
+        thresholdString = (thresholdString == null) ? "" : thresholdString;
+        threshold = Double.parseDouble(thresholdString);
+    } catch (Exception e) {
+        threshold = null;
+    }
+
+    icdCode = request.getParameter("icdCode");
+    icdCode = (icdCode == null) ? "" : icdCode;
+    zipCode = request.getParameter("zipCode");
+    zipCode = (zipCode == null) ? "" : zipCode;
 %>
 
 <form action="requestBiosurveillance.jsp" id="biosurveillanceSelectionForm" method="post">
 <div align=center>
     <table class="fTable" align="center">
         <tr>
-            <td> icdCode: </td>
+            <td> Diagnosis Code (ICD): </td>
             <td>
-                <input name="icdCode" value="" size="10">
+                <input name="icdCode" value="<%= icdCode %>" size="10">
             </td>
-            <td> zipCode: </td>
+            <td> ZIP Code: </td>
             <td>
-                <input name="zipCode" value="" size="10">
+                <input name="zipCode" value="<%= zipCode%>" size="10">
             </td>
+        </tr>
+        <tr>
             <td> Date: </td>
             <td>
-                <input name="date" value="" size="10">
+                <input name="date" value="<%= dateString %>" size="10">
                 <input type=button value="Select Date" onclick="displayDatePicker('date');">
+            </td>
+            <td>Threshold: </td>
+            <td>
+                <input name="threshold" value="<%= thresholdString %>">
             </td>
         </tr>
     </table>
@@ -68,25 +82,17 @@
 <br/>
 <table class="fTable" align='center'>
 
-
-
-    <%--    boolean hasData = false;
-    //        int index = 0;
-    //        loggingAction.logEvent(TransactionType.ACCESS_LOG_VIEW, loggedInMID, 0, "");
-    //        System.out.println("beginning");
-    //--%>
-
     <%
         if( request.getParameter("seeTrend") != null ) {
     %>
     <tr>
-        <td ><%= (action.seeTrends(request.getParameter("icdCode"), request.getParameter("zipCode"), date)) %></td>
+        <td ><div><%= (action.seeTrends(request.getParameter("icdCode"), request.getParameter("zipCode"), date)) %></div></td>
     </tr>
     <%
     } else if(request.getParameter("detectEpidemic") != null ) {
     %>
         <tr>
-            <td ><%= (action.detectEpidemic(request.getParameter("icdCode"), request.getParameter("zipCode"), date)) %></td>
+            <td ><div><%= (action.detectEpidemic(request.getParameter("icdCode"), request.getParameter("zipCode"), date, threshold)) %></div></td>
         </tr>
     <%
     }
