@@ -85,8 +85,12 @@
     <%
         if( request.getParameter("seeTrend") != null ) {
     %>
+
     <tr>
         <td ><div><%= (action.seeTrends(request.getParameter("icdCode"), request.getParameter("zipCode"), date)) %></div></td>
+    </tr>
+    <tr>
+        <td>Note: Threshold not taken into account for "See Trends".</td>
     </tr>
     <%
     } else if(request.getParameter("detectEpidemic") != null ) {
