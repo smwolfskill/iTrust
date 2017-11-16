@@ -61,7 +61,6 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 	private String spiritualPractices = "";
 	private String alternateName = "";
 	private String dateOfDeactivationStr = "";
-	// height, weight, smoker, preRegistered
 
 
 	public BloodType getBloodType() {

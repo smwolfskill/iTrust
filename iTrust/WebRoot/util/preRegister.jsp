@@ -25,139 +25,142 @@
             <td colspan=2><b>Please enter your information</b></td>
         </tr>
         <tr>
-            <td>First Name:</td>
+            <td colspan=2><i>* Indicates required field</i></td>
+        </tr>
+        <tr>
+            <td>First Name *</td>
             <td>
                 <input type=TEXT name="firstName" required>
             </td>
         </tr>
         <tr>
-            <td>Last Name:</td>
+            <td>Last Name *</td>
             <td>
                 <input type=TEXT name="lastName" required>
             </td>
         </tr>
         <tr>
-            <td>Email:</td>
+            <td>Email *</td>
             <td>
                 <input type="email" name="email" required>
             </td>
         </tr>
         <tr>
-            <td>Password:</td>
+            <td>Password *</td>
             <td>
                 <input type="password" maxlength="20" name="password" required>
             </td>
         </tr>
         <tr>
-            <td>Confirm Password:</td>
+            <td>Confirm Password *</td>
             <td>
                 <input type="password" maxlength="20" name="confirmPassword" required>
             </td>
         </tr>
         <tr>
-            <td>Contact Information</td>
+            <td><b>Contact Information</b></td>
             <td><hr></td>
         </tr>
         <tr>
-            <td>Street Address 1:</td>
+            <td>Street Address 1</td>
             <td>
                 <input type="text" name="address1">
             </td>
         </tr>
         <tr>
-            <td>Street Address 2:</td>
+            <td>Street Address 2</td>
             <td>
                 <input type="text" name="address2">
             </td>
         </tr>
         <tr>
-            <td>City:</td>
+            <td>City</td>
             <td>
                 <input type="text" name="city">
             </td>
         </tr>
         <tr>
-            <td>State:</td>
+            <td>State</td>
             <td>
                 <input type="text" name="state">
             </td>
         </tr>
         <tr>
-            <td>ZIP Code:</td>
+            <td>ZIP Code</td>
             <td>
                 <input type="text" name="zip">
             </td>
         </tr>
         <tr>
-            <td>Phone:</td>
+            <td>Phone</td>
             <td>
                 <input type="tel" name="phone">
             </td>
         </tr>
         <tr>
-            <td>Insurance Information</td>
+            <td><b>Insurance Information</b></td>
             <td><hr></td>
         </tr>
         <tr>
-            <td>Provider Name:</td>
+            <td>Provider Name</td>
             <td>
                 <input type="text" name="icName">
             </td>
         </tr>
         <tr>
-            <td>Street Address 1:</td>
+            <td>Street Address 1</td>
             <td>
                 <input type="text" name="icAddress1">
             </td>
         </tr>
         <tr>
-            <td>Street Address 2:</td>
+            <td>Street Address 2</td>
             <td>
                 <input type="text" name="icAddress2">
             </td>
         </tr>
         <tr>
-            <td>City:</td>
+            <td>City</td>
             <td>
                 <input type="text" name="icCity">
             </td>
         </tr>
         <tr>
-            <td>State:</td>
+            <td>State</td>
             <td>
                 <input type="text" name="icState">
             </td>
         </tr>
         <tr>
-            <td>ZIP Code:</td>
+            <td>ZIP Code</td>
             <td>
                 <input type="text" name="icZip">
             </td>
         </tr>
         <tr>
-            <td>Phone:</td>
+            <td>Phone</td>
             <td>
                 <input type="tel" name="icPhone">
             </td>
         </tr>
         <tr>
-            <td>Health Information</td>
+            <td><b>Health Information</b></td>
             <td><hr></td>
         </tr>
         <tr>
-            <td>Height:</td>
+            <td>Height</td>
             <td>
                 <input type="text" name="height">
             </td>
         </tr>
         <tr>
-            <td>Weight:</td>
+            <td>Weight</td>
             <td>
                 <input type="text" name="weight">
             </td>
         </tr>
         <tr>
-            <td>Smoker:</td>
+            <td>Smoker</td>
             <td>
                 <input type="checkbox" name="smoker">
             </td>
