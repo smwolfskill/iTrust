@@ -451,4 +451,8 @@ public class DAOFactory {
 	public OphthalmologyDiagnosisDAO getOPDiagnosisDAO() {
 		return new OphthalmologyDiagnosisDAO(this);
 	}
+
+	public PreRegisterDAO getPreRegisterDAO() {
+		return new PreRegisterDAO(this);
+	}
 }
