@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class RequestBiosurveillanceAction {
     DiagnosesDAO diagDAO;
-    private final long DAY = 1000*60*60*24L;
+    private final long MILLIS_PER_DAY = 1000*60*60*24L;
 
     public RequestBiosurveillanceAction (DAOFactory factory){
         diagDAO = factory.getDiagnosesDAO();
@@ -28,27 +28,26 @@ public class RequestBiosurveillanceAction {
      * @throws ITrustException
      * @throws FormValidationException
      */
-    public String detectEpidemic(String icdCode, String zipCode, Date date, Double threshold) throws ITrustException, FormValidationException {
-
+    public String detectEpidemic(String icdCode, String zipCode, Date date, Double threshold) throws ITrustException, IllegalArgumentException {
+        if(threshold == null || threshold < 0.0) {
+            throw new IllegalArgumentException("threshold should exist and be non-negative.");
+        }
         ArrayList<DiagnosisStatisticsBean> diagnosisStatisticsBean = null;
         /* Check zip code validation */
         try{
             if (!zipCode.matches("([0-9]{5})|([0-9]{5}-[0-9]{4})"))
                 throw new FormValidationException("invalid zip code");
-            if (Integer.valueOf(zipCode)<10000 || Integer.valueOf(zipCode)>99999)
-                throw new FormValidationException("zip code length should be exactly equal to 5");
-        } catch (FormValidationException e) { return "invalid zip code"; }
+        } catch (FormValidationException e) {
+            return "invalid zip code";
+        }
 
          /* Check icdCode validation */
         try {
-            if(icdCode.contains("."))
-                Double.parseDouble(icdCode);
-            else
-                Integer.parseInt(icdCode);
+            Double.parseDouble(icdCode);
         } catch (Exception e) { return "invalid diagnosis code"; }
 
         try {
-            Date start = new Date(date.getTime() - 14*DAY);
+            Date start = new Date(date.getTime() - 14* MILLIS_PER_DAY);
             diagnosisStatisticsBean = diagDAO.getWeeklyCounts(icdCode, zipCode, start, date);
         } catch (DBException e) {
             throw new ITrustException(e.getMessage());
@@ -70,7 +69,7 @@ public class RequestBiosurveillanceAction {
      */
     public long weekNumber(Date date) {
         Date startDateOfYear = new Date(date.getYear(),0,1);
-        return (date.getTime() - startDateOfYear.getTime())/(7*DAY) + 1;
+        return (date.getTime() - startDateOfYear.getTime())/(7* MILLIS_PER_DAY) + 1;
     }
 
     /**
