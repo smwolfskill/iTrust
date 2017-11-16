@@ -1,19 +1,22 @@
 package edu.ncsu.csc.itrust.action;
 
+import edu.ncsu.csc.itrust.beans.DiagnosisBean;
 import edu.ncsu.csc.itrust.beans.DiagnosisStatisticsBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.DiagnosesDAO;
+import edu.ncsu.csc.itrust.dao.mysql.ICDCodesDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+
 import static java.lang.Math.toIntExact;
 
 public class RequestBiosurveillanceAction {
     DiagnosesDAO diagDAO;
     ICDCodesDAO icdDAO;
+
     private final long MILLIS_PER_DAY = 1000*60*60*24L;
 
     public RequestBiosurveillanceAction (DAOFactory factory){
