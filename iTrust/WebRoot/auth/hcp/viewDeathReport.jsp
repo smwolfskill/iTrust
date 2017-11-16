@@ -13,10 +13,7 @@
 <h1>Viewing Death Report</h1>
 <br />
 
-
 <%
-
-
     ViewDeathReportAction action = new ViewDeathReportAction(DAOFactory.getProductionInstance());
     List<List<String>> diagnoses;
 
