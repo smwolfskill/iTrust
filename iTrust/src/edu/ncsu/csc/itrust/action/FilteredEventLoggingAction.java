@@ -11,6 +11,7 @@ import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
+import edu.umd.cs.findbugs.graph.Graph;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -29,6 +30,8 @@ public class FilteredEventLoggingAction {
         this.transDAO = factory.getTransactionDAO();
         this.authDAO = factory.getAuthDAO();
     }
+
+
 
     /*
 	userRole: "all" for all, role otherwise
@@ -78,8 +81,9 @@ public class FilteredEventLoggingAction {
         for (TransactionBean bean: beanList) {
 
             //first bar chart: logged in user role v.s. number of transactions
-            String loggedInRole = this.authDAO.getUserRole(bean.getLoggedInMID()).getUserRolesString();
-            populateDataFromBeanList(loggedInData, loggedInRole);
+            Role loggedInRole = getUserRole(bean.getLoggedInMID());
+            String loggedInRoleString = loggedInRole.getUserRolesString();
+            populateDataFromBeanList(loggedInData, loggedInRoleString);
 
             //second bar chart: secondary user role v.s. number of transaction
             long secondaryMID = bean.getSecondaryMID();
@@ -108,75 +112,36 @@ public class FilteredEventLoggingAction {
             populateDataFromBeanList(transactionTypeData, transactionTypeCode);
         }
 
-        String loggedInUsers = "";
-        int loggedInMax = Collections.max(loggedInData.values());
-        String loggedInMaxString = String.valueOf(loggedInMax);
-        String loggedInTransNum = "";
-        for (Map.Entry<String, Integer> entry: loggedInData.entrySet()){
-            loggedInUsers += "|" + entry.getKey();
-            int transNum = entry.getValue()*100/loggedInMax;
-            loggedInTransNum += String.valueOf(transNum) + ",";
-        }
-        loggedInTransNum = loggedInTransNum.substring(0, loggedInTransNum.length() - 1);
-
-        String secondaryUsers = "";
-        int secondaryMax = Collections.max(secondaryData.values());
-        String secondaryMaxString = String.valueOf(secondaryMax);
-        String secondaryTransNum = "";
-        for (Map.Entry<String, Integer> entry: secondaryData.entrySet()){
-            secondaryUsers += "|" + entry.getKey();
-            int transNum = entry.getValue()*100/secondaryMax;
-            secondaryTransNum += String.valueOf(transNum) + ",";
-        }
-        secondaryTransNum = secondaryTransNum.substring(0, secondaryTransNum.length() - 1);
-
+        GraphStringContainer loggedIn = parseGraphData(loggedInData);
+        GraphStringContainer secondary = parseGraphData(secondaryData);
         Map<String, Integer> sortedDateData = new TreeMap<>(dateData);
-        String dates = "";
-        int dateMax = Collections.max(sortedDateData.values());
-        String dateMaxString = String.valueOf(dateMax);
-        String dateTransNum = "";
-        for (Map.Entry<String, Integer> entry: sortedDateData.entrySet()){
-            dates += "|" + entry.getKey();
-            int transNum = entry.getValue()*100/dateMax;
-            dateTransNum += String.valueOf(transNum) + ",";
-        }
-        dateTransNum = dateTransNum.substring(0, dateTransNum.length() - 1);
-
-        String types = "";
-        int typeMax = Collections.max(transactionTypeData.values());
-        String typeMaxString = String.valueOf(typeMax);
-        String typeTransNum = "";
-        for (Map.Entry<String, Integer> entry: transactionTypeData.entrySet()){
-            types += "|" + entry.getKey();
-            int transNum = entry.getValue()*100/typeMax;
-            typeTransNum += String.valueOf(transNum) + ",";
-        }
-        typeTransNum = typeTransNum.substring(0, typeTransNum.length() - 1);
+        GraphStringContainer date = parseGraphData(sortedDateData);
+        GraphStringContainer transactionType = parseGraphData(transactionTypeData);
 
         return "<div><img id=\"chart1\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
-                + dateTransNum
+                + date.transNumString
                 + "&amp;chxr=1,0,"
-                + dateMaxString
+                + date.maxString
                 + "&amp;chxl=0:"
-                + dates
+                + date.field
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Month+and+Year&amp;chts=000000,18,l\"></div><div><img id=\"chart2\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
-                + typeTransNum
+                + transactionType.transNumString
                 + "&amp;chxr=1,0,"
-                + typeMaxString
+                + transactionType.maxString
                 + "&amp;chxl=0:"
-                + types
+                + transactionType.field
                 + "&amp;chbh=25,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Type&amp;chts=000000,18,l\"></div><div><img id=\"chart3\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
-                + loggedInTransNum
+                + loggedIn.transNumString
                 + "&amp;chxr=1,0,"
-                + loggedInMaxString
+                + loggedIn.maxString
                 + "&amp;chxl=0:"
-                + loggedInUsers
+                + loggedIn.field
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Logged-in+User&amp;chts=000000,18,l\"></div><div><img id=\"chart4\" src=\"https://chart.googleapis.com/chart?chxt=x,y&amp;cht=bvs&amp;chd=t1:"
-                + secondaryTransNum
+                + secondary.transNumString
                 + "&amp;chxr=1,0,"
-                + secondaryMaxString
+                + secondary.maxString
                 + "&amp;chxl=0:"
-                + secondaryUsers
+                + secondary.field
                 + "&amp;chbh=45,5&amp;chs=1000x300&amp;chco=76A4FB&amp;chls=2.0&amp;chtt=Transactions+by+Secondary+User&amp;chts=000000,18,l\"></div>";
     }
 
@@ -216,4 +181,30 @@ public class FilteredEventLoggingAction {
         }
         return endDate;
     }
+
+    /**
+     *
+     * @param data The map containing data labels and points for use in the graph
+     * @return The string data to be used in the graph
+     */
+    private GraphStringContainer parseGraphData(Map<String, Integer> data) {
+        GraphStringContainer container = new GraphStringContainer();
+        container.field = "";
+        container.transNumString = "";
+        int max = Collections.max(data.values());
+        container.maxString = String.valueOf(max);
+        for (Map.Entry<String, Integer> entry: data.entrySet()){
+            container.field += "|" + entry.getKey();
+            int transNum = entry.getValue()*100/max;
+            container.transNumString += String.valueOf(transNum) + ",";
+        }
+        container.transNumString = container.transNumString.substring(0, container.transNumString.length() - 1);
+        return container;
+    }
+}
+
+class GraphStringContainer {
+    String field;
+    String maxString;
+    String transNumString;
 }
