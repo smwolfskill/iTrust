@@ -35,9 +35,7 @@ public class RequestBiosurveillanceAction {
      * @throws FormValidationException
      */
     public String detectEpidemic(String icdCode, String zipCode, Date date, Double threshold) throws ITrustException, IllegalArgumentException {
-        if(threshold == null || threshold < 0.0) {
-            throw new IllegalArgumentException("threshold should exist and be non-negative.");
-        }
+
         ArrayList<DiagnosisStatisticsBean> diagnosisStatisticsBean = null;
         /* Check zip code validation */
         try{
@@ -48,8 +46,9 @@ public class RequestBiosurveillanceAction {
         }
 
          /* Check icdCode validation */
+         Double icd;
         try {
-            Double.parseDouble(icdCode);
+            icd = Double.parseDouble(icdCode);
         } catch (Exception e) { return "invalid diagnosis code"; }
 
         try {
@@ -59,10 +58,13 @@ public class RequestBiosurveillanceAction {
             throw new ITrustException(e.getMessage());
         }
 
-        if(icdCode.length() >= 3 && icdCode.substring(0, 3).equals("84.")) {
+        if(icd >= 84 && icd < 85) {
+            if((threshold == null || threshold < 0.0)) {
+                throw new IllegalArgumentException("invalid threshold");
+            }
             return isMalariaEpidemic(diagnosisStatisticsBean, threshold) ? "Yes" : "No";
         }
-        else if(icdCode.length() >= 4 && icdCode.substring(0, 4).equals("487.")) {
+        else if(icd >= 487 && icd < 488) {
             return isInfluenzaEpidemic(diagnosisStatisticsBean) ? "Yes" : "No";
         }
         return "No analysis can occur";
