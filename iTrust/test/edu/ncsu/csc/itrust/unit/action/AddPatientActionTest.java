@@ -66,7 +66,7 @@ public class AddPatientActionTest extends TestCase {
 		p.setFirstName("Jiminy");
 		p.setLastName("Cricket");
 		p.setEmail("make.awish@gmail.com");
-		long mid = action.addPreRegisteredPatient(p,10,10,0);
+		long mid = action.addPreRegisteredPatient(p,"10","10","0");
 		assertEquals(p.getMID(),mid);
 		assertTrue(preRegisterDAO.checkPreregisteredPatient(mid));
 	}

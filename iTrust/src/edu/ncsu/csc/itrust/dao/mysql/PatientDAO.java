@@ -1102,6 +1102,36 @@ public class PatientDAO {
 			DBUtil.closeConnection(conn, ps);
 		}
 	}
+
+	/**
+	 * Returns all patients with names "LIKE" (as in SQL) the passed in parameters.
+	 *
+	 * @param email The patient's email.
+	 * @return A java.util.List of PatientBeans.
+	 * @throws DBException
+	 */
+	public List<PatientBean> searchForPatientsWithEmail(String email) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		if (email.equals("%")) return new Vector<PatientBean>();
+
+		try {
+			conn = factory.getConnection();
+
+			ps = conn.prepareStatement("SELECT * FROM patients WHERE email LIKE ?");
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			List<PatientBean> loadlist = patientLoader.loadList(rs);
+			rs.close();
+			ps.close();
+			return loadlist;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
 	
 	/**
 	 * Allows a patient to add a designated nutritionist. Only

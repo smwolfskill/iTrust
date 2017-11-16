@@ -8,6 +8,7 @@ import edu.ncsu.csc.itrust.exception.DBException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class PreRegisterDAO
 {
@@ -21,17 +22,30 @@ public class PreRegisterDAO
 
     }
 
-    public void addPreregisterPatient(long pid, float height, float weight, int isSmoker) throws DBException {
+    public void addPreregisterPatient(long pid, String height, String weight, String smoker) throws DBException {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = factory.getConnection();
             ps = conn.prepareStatement("INSERT INTO PreRegisteredPatients(MID, Height, Weight, Smoker) VALUES(?,?,?,?)");
             ps.setLong(1,pid);
-            ps.setFloat(2,height);
-            ps.setFloat(3,weight);
-            ps.setFloat(4,isSmoker);
+            if(height == null || height.equals(""))
+                ps.setNull(2,Types.FLOAT);
+            else
+                ps.setFloat(2, Float.parseFloat(height));
+
+            if(weight == null || weight.equals(""))
+                ps.setNull(3,Types.FLOAT);
+            else
+                ps.setFloat(3, Float.parseFloat(weight));
+
+            if(smoker == null || smoker.equals(""))
+                ps.setNull(4,Types.INTEGER);
+            else
+                ps.setInt(4, Integer.parseInt(smoker));
+
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
 
             throw new DBException(e);

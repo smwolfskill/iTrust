@@ -30,7 +30,7 @@ public class AddPreRegisteredPatientTest extends TestCase
         long pid = patientDAO.addEmptyPatient();
         patientDAO.editPatient(p,pid);
 
-        preRegisterDAO.addPreregisterPatient(pid,10,10,0);
+        preRegisterDAO.addPreregisterPatient(pid,"10","10","0");
 
         assertTrue(preRegisterDAO.checkPreregisteredPatient(pid));
     }

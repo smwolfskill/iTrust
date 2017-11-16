@@ -16,9 +16,13 @@
 if(request.getUserPrincipal() != null) {
 	
 	long mid = Long.valueOf(request.getUserPrincipal().getName());
-	
+
 	if (request.isUserInRole("patient")) {
-		response.sendRedirect("patient/home.jsp");
+	    if (prodDAO.getPreRegisterDAO().checkPreregisteredPatient(loggedInMID)) {
+	        response.sendRedirect("preRegistered.jsp");
+		} else {
+			response.sendRedirect("patient/home.jsp");
+		}
 		return;
 	} 
 	else if (request.isUserInRole("uap")) {

@@ -78,18 +78,15 @@ public class AddPatientAction {
 		return newMID;
 	}
 
-	public long addPreRegisteredPatient(PatientBean p, float height, float weight, int isSmoker) throws FormValidationException, ITrustException {
-
+	public long addPreRegisteredPatient(PatientBean p, String height, String weight, String smoker) throws FormValidationException, ITrustException {
 		new AddPatientValidator().validate(p);
 		long newMID = patientDAO.addEmptyPatient();
 		p.setMID(newMID);
-		String pwd = authDAO.addUser(newMID, Role.PATIENT, RandomPassword.getRandomPassword());
+		String pwd = authDAO.addUser(newMID, Role.PATIENT, p.getPassword());
 		p.setPassword(pwd);
-		p.setDateOfDeactivationStr(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+		p.setConfirmPassword(pwd);
 		patientDAO.editPatient(p,personnelDAO.searchForPersonnelWithName("Shape","Shifter").get(0).getMID());
-
-		preRegisterDAO.addPreregisterPatient(p.getMID(),height,weight,isSmoker);
-
+		preRegisterDAO.addPreregisterPatient(p.getMID(),height,weight,smoker);
 		return newMID;
 	}
 }
