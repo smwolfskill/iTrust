@@ -152,6 +152,7 @@
 		    <li><a href="/iTrust/auth/staff/editPersonnel.jsp">UAPs</a>
 			<li><a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a>
 			<li><a href="/iTrust/auth/hcp/viewPrescriptionRenewalNeeds.jsp">Potential Prescription-Renewals</a>
+			<li><a href="/iTrust/auth/hcp/requestBiosurveillance.jsp">Request Biosurveillance</a>
 		</ul>
 	</div>
 </div>
