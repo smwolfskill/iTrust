@@ -22,11 +22,11 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         //Click on "Transaction Log"
         driver.findElement(By.linkText("Transaction Log")).click();
 
-        //Select "Doctor" for first role
-        new Select(driver.findElement(By.name("userRole"))).selectByVisibleText("Doctor");
+        //Select "hcp" for first role
+        new Select(driver.findElement(By.name("userRole"))).selectByVisibleText("hcp");
 
         //Select "Patient" for second role
-        new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("Patient");
+        new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("patient");
 
         //Set dates
         driver.findElement(By.name("startDate")).clear();
@@ -35,7 +35,7 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         driver.findElement(By.name("endDate")).sendKeys("06/26/2007");
 
         //select "1900" for transaction type
-        new Select(driver.findElement(By.name("transactionType"))).selectByVisibleText("1900");
+        new Select(driver.findElement(By.name("transactionType"))).selectByVisibleText("PRESCRIPTION_REPORT_VIEW");
 
         //Click on "Summary button"
         driver.findElement(By.name("submitView")).click();
@@ -54,10 +54,10 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         driver.findElement(By.linkText("Transaction Log")).click();
 
         //Select "Doctor" for first role
-        new Select(driver.findElement(By.name("userRole"))).selectByVisibleText("Doctor");
+        new Select(driver.findElement(By.name("userRole"))).selectByVisibleText("hcp");
 
         //Select "Patient" for second role
-        new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("Patient");
+        new Select(driver.findElement(By.name("secondaryRole"))).selectByVisibleText("patient");
 
         //Set dates
         driver.findElement(By.name("startDate")).clear();
@@ -66,7 +66,7 @@ public class FilteredTransactionLogTest extends iTrustSeleniumTest {
         driver.findElement(By.name("endDate")).sendKeys("06/26/2007");
 
         //select "1900" for transaction type
-        new Select(driver.findElement(By.name("transactionType"))).selectByVisibleText("1900");
+        new Select(driver.findElement(By.name("transactionType"))).selectByVisibleText("PRESCRIPTION_REPORT_VIEW");
 
         //Click on "Summary button"
         driver.findElement(By.name("submitSum")).click();

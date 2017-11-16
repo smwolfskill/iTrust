@@ -10,6 +10,7 @@ import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.beans.loaders.OperationalProfileLoader;
 import edu.ncsu.csc.itrust.beans.loaders.TransactionBeanLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.enums.Role;
 import edu.ncsu.csc.itrust.enums.TransactionType;
 import edu.ncsu.csc.itrust.exception.DBException;
 
@@ -335,58 +336,31 @@ public class TransactionDAO {
 		}
 	}
 
-	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, String transType) throws DBException {
+	public List<TransactionBean> getFilteredTransactions(String userRole, String secondaryRole, Date startDate, Date endDate, String transType) throws DBException
+	{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String userRoleCommand="", secondaryRoleCommand="", transTypeCommand="";
-		if(userRole!=null && !userRole.equals("1000000000")) {
-			String role1 = userRole.equals("hcp") ? ">=" : "<";
-			userRoleCommand = " AND loggedInMID " + role1 + " 9000000000 ";
-		//	System.out.println(userRoleCommand);
-		}
-		if(secondaryRole!=null && !secondaryRole.equals("1000000000")) {
-
-			String role2 = secondaryRole.equals("hcp") ? ">=" : "<";
-
-			secondaryRoleCommand = " AND secondaryMID " + role2 + " 9000000000 ";
-		//	System.out.println(secondaryRoleCommand);
-		}
-		if(transType!=null && !transType.equals("1000000000")) {
-			transTypeCommand = " AND transactionCode = " + transType;
-		//	System.out.println(transTypeCommand);
-		}
-
-		try {
+		try
+		{
 			conn = factory.getConnection();
-			if( userRole == null && secondaryRole == null && startDate == null && endDate == null && transType == null) {
-			//	System.out.println("all null");
-				ps = conn.prepareStatement("SELECT * FROM transactionlog ORDER BY timeLogged DESC");
-			}
-			else {
-			//	System.out.println(userRole+" ");
-			//	System.out.println(secondaryRole+"");
-			//	System.out.println(startDate);
-			//	System.out.println(endDate);
-			//	System.out.println(transType);
-				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE " +
-						"timeLogged >= ? AND timeLogged <= ?" +
-						//"AND loggedInMID"+role1+"9000000000 AND secondaryMID"+role2+"9000000000"+
-						userRoleCommand + secondaryRoleCommand + transTypeCommand +" ORDER BY timeLogged DESC");
-						//"transactionCode = ?");
-				//ps.setString(1, transType);
-				ps.setTimestamp(1, new Timestamp(startDate.getTime()));
-				ps.setTimestamp(2, new Timestamp(endDate.getTime()));
-				//ps.setBoolean(4, role1);
-				//ps.setBoolean(5, role2);
-				//ps.setString(4, userRole);
-				//ps.setString(5, secondaryRole);
-			}
+			ps = conn.prepareStatement("SELECT transactionlog.* FROM transactionlog " +
+					"JOIN users AS u1 ON u1.MID = transactionlog.loggedInMID " +
+					"LEFT JOIN users AS u2 ON u2.MID = transactionlog.secondaryMID " +
+					"WHERE u1.Role LIKE ? " +
+					"AND (u2.Role LIKE ? OR (u2.Role is NULL AND ?))" +
+					"AND transactionlog.timeLogged >= ? " +
+					"AND transactionlog.timeLogged <= ? " +
+					"AND transactionlog.transactionCode LIKE ? " +
+					"ORDER BY timeLogged DESC");
+			ps.setString(1, ("all".equals(userRole) || userRole == null) ? "%" : userRole);
+			ps.setString(2, ("all".equals(secondaryRole) || secondaryRole == null) ? "%" : secondaryRole);
+			ps.setBoolean(3, ("all".equals(secondaryRole) || secondaryRole == null));
+			ps.setTimestamp(4, (startDate == null) ? new Timestamp(0) : new Timestamp(startDate.getTime()));
+			ps.setTimestamp(5, (endDate == null) ? new Timestamp(Long.MAX_VALUE) : new Timestamp(endDate.getTime()));
+			ps.setString(6, ("all".equals(transType) || transType == null) ? "%" : transType);
+
 			ResultSet rs = ps.executeQuery();
-//			loggedInMID/1e9 = " + userRole +
-//			" AND secondaryMID/1e9 = " + secondaryRole + " AND
-//			WHERE timeLogged <= " + endDate +
-//			" And timeLogged >= " + startDate +" AND transactionCode = " +transType
 			List<TransactionBean> loadlist = loader.loadList(rs);
 			rs.close();
 			ps.close();
