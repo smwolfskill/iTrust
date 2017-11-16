@@ -33,7 +33,6 @@ public class RequestBiosurveillanceActionTest extends TestCase {
     public void testDetectEpidemic_ZipCode() throws Exception{
         assertEquals("invalid zip code", action.detectEpidemic("anything", "ABCDE", new Date(),.0));
         assertEquals("invalid zip code", action.detectEpidemic("anything", "1234", new Date(),.0));
-        assertEquals("invalid zip code", action.detectEpidemic("anything", "01234", new Date(),.0));
         assertEquals("invalid zip code", action.detectEpidemic("anything", "1A234", new Date(),.0));
     }
 
