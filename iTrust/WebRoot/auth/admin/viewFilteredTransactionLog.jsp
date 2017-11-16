@@ -46,6 +46,8 @@
     }
     String displayStartDate = (startDate == null) ? "":new SimpleDateFormat("MM/dd/yyyy").format(startDate);
     String displayEndDate = (endDate == null)? "":new SimpleDateFormat("MM/dd/yyyy").format(endDate);
+    String userRoleSelect = request.getParameter("userRole");
+    String secondaryRoleSelect = request.getParameter("secondaryRole");
 
 %>
 <form action="viewFilteredTransactionLog.jsp" id="logRoleSelectionForm" method="post">
@@ -58,12 +60,12 @@
                 <td>View log for: </td>
                 <td>
                     <label for="userRoleSelectMenu">User Role</label>
-                    <select name="userRole" id="userRoleSelectMenu">
+                    <select name="userRole" id="userRoleSelectMenu" selected = "<%= StringEscapeUtils.escapeHtml("" + (userRoleSelect)) %>">
                         <option value="all"> All</option>
                         <%
                             for( Role role: Role.values()) {
                         %>
-                        <option value="<%= role.getUserRolesString() %>"><%= role.getUserRolesString() %></option>
+                        <option value="<%= role.getUserRolesString() %>" <%if(role.getUserRolesString().equals(userRoleSelect)){%>selected<%}%> ><%= role.getUserRolesString() %></option>
                         <%
                             }
                         %>
@@ -77,7 +79,7 @@
                         <%
                             for( Role role: Role.values()) {
                         %>
-                        <option value="<%= role.getUserRolesString() %>"><%= role.getUserRolesString() %></option>
+                        <option value="<%= role.getUserRolesString() %>" <%if(role.getUserRolesString().equals(secondaryRoleSelect)){%>selected<%}%>><%= role.getUserRolesString() %></option>
                         <%
                             }
                         %>
@@ -105,7 +107,7 @@
                         <%
                             for( TransactionType transactionType: TransactionType.values()) {
                         %>
-                        <option value="<%= transactionType.getCode() %>"><%= transactionType.name() %></option>
+                        <option value="<%= transactionType.getCode() %>" ><%= transactionType.name() %></option>
                         <%
                             }
                         %>
@@ -125,21 +127,21 @@
 
 
 
-<%--    boolean hasData = false;
-//        int index = 0;
-//        loggingAction.logEvent(TransactionType.ACCESS_LOG_VIEW, loggedInMID, 0, "");
-//        System.out.println("beginning");
-//--%>
+    <%--    boolean hasData = false;
+    //        int index = 0;
+    //        loggingAction.logEvent(TransactionType.ACCESS_LOG_VIEW, loggedInMID, 0, "");
+    //        System.out.println("beginning");
+    //--%>
 
     <%
         if( request.getParameter("submitSum") != null ) {
     %>
-        <tr>
-            <td ><%= (url) %></td>
-        </tr>
+    <tr>
+        <td ><%= (url) %></td>
+    </tr>
     <%
-        }
-        else {
+    }
+    else {
     %>
 
     <tr>
