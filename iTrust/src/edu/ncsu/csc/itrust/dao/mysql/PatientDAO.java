@@ -1209,7 +1209,7 @@ public class PatientDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT Code, Description, COUNT(DISTINCT(MID)) AS quantity " +
+			ps = conn.prepareStatement("SELECT Code, Description, COUNT(DISTINCT(MID)) AS Quantity " +
 					"FROM patients " +
 					"JOIN officevisits ON patients.MID = officevisits.PatientID " +
 					"JOIN icdcodes ON patients.CauseOfDeath = icdcodes.Code " +
@@ -1218,7 +1218,7 @@ public class PatientDAO {
 					"AND YEAR(patients.DateOfDeath) <= ? " +
 					"AND (patients.gender = ? OR ?) " +
 					"GROUP BY Code, Description " +
-					"ORDER BY quantity DESC " +
+					"ORDER BY Quantity DESC " +
 					"LIMIT 2");
 			ps.setLong(1, HCPID);
 			ps.setBoolean(2, HCPID == -1);
@@ -1232,7 +1232,7 @@ public class PatientDAO {
 				List<String> temp = new ArrayList<>();
 				temp.add(rs.getString("Code"));
 				temp.add(rs.getString("Description"));
-				temp.add(rs.getString("quantity"));
+				temp.add(rs.getString("Quantity"));
 				ret.add(temp);
 			}
 			return ret;
