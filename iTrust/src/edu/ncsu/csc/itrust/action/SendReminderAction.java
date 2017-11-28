@@ -8,8 +8,10 @@ import java.time.temporal.ChronoUnit;
 
 import edu.ncsu.csc.itrust.beans.ApptBean;
 import edu.ncsu.csc.itrust.beans.MessageBean;
+import edu.ncsu.csc.itrust.beans.PersonnelBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.ApptDAO;
+import edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
@@ -22,7 +24,9 @@ public class SendReminderAction {
     private SendMessageAction smAction;
 
     public SendReminderAction(DAOFactory factory, long loggedInMID) throws DBException {
-        this.systemReminderMID = factory.getPersonnelDAO().searchForPersonnelWithName("System", "Reminder").get(0).getMID();
+        PersonnelDAO personnelDAO = factory.getPersonnelDAO();
+        List<PersonnelBean> personnels = personnelDAO.searchForPersonnelWithName("System", "Reminder");
+        this.systemReminderMID = personnels.get(0).getMID();
         this.loggedInMID = loggedInMID;
         this.apptDAO = factory.getApptDAO();
         this.smAction = new SendMessageAction(factory, systemReminderMID);
