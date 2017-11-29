@@ -93,7 +93,7 @@
         <td>Note: Threshold not taken into account for "See Trends".</td>
     </tr>
     <%
-    } else if(request.getParameter("detectEpidemic") != null ) {
+    } else if(request.getParameter("getEpidemic") != null ) {
     %>
         <tr>
             <td ><div><%= (action.detectEpidemic(request.getParameter("icdCode"), request.getParameter("zipCode"), date, threshold)) %></div></td>

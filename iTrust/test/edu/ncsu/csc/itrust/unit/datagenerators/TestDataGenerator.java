@@ -39,6 +39,11 @@ public class TestDataGenerator {
 		gen.clearAllTables();
 		gen.standardData();
 
+		//Load epidemic data
+		if(args[0].equals("-epidemics")) {
+			gen.malaria_epidemic();
+			gen.influenza_epidemic();
+		}
 	}
 
 	private String DIR = "sql/data";
