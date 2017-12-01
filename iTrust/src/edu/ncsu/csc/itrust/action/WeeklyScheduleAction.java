@@ -13,12 +13,15 @@ import java.util.Date;
 import java.util.List;
 
 public class WeeklyScheduleAction {
-    ApptDAO apptDAO;
+    public final Color BASE_COLOR = new Color(250,250,250);
+    public final String BASE_COLOR_STR;
+    private ApptDAO apptDAO;
 
     //private final long MILLIS_PER_DAY = 1000*60*60*24L;
 
     public WeeklyScheduleAction (DAOFactory factory){
         apptDAO = factory.getApptDAO();
+        BASE_COLOR_STR = colorToHexStr(BASE_COLOR);
     }
 
     /**
@@ -149,12 +152,16 @@ public class WeeklyScheduleAction {
     public String colorMap(int numAppts, int maxNumAppts) {
         int end = 0;
         int start = 180;
-        Color clr = new Color(250, 250, 250); //start at white
+        Color clr = BASE_COLOR; //start at white
         if(maxNumAppts != 0 && numAppts != 0) {
             //int val = 255 - (numAppts * 255 / maxNumAppts);
             int val = start + numAppts * ((end - start) / maxNumAppts);
             clr = new Color(250, val, val);
         }
+        return colorToHexStr(clr);
+    }
+
+    private String colorToHexStr(Color clr) {
         String map = "#" + Integer.toHexString(clr.getRed());
         if(clr.getGreen() < 16) {
             map += "0";
