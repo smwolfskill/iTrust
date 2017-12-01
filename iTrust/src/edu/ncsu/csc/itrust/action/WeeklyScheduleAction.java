@@ -39,9 +39,11 @@ public class WeeklyScheduleAction {
     public class HeatmapData {
         public String[][] colorMap;
         public Pair<Integer,Integer> earliestAndLatest;
-        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest) {
+        public int maxNumAppt = -1;
+        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest, int maxNumAppt) {
             this.colorMap = colorMap;
             this.earliestAndLatest = earliestAndLatest;
+            this.maxNumAppt = maxNumAppt;
         }
     }
 
@@ -71,7 +73,7 @@ public class WeeklyScheduleAction {
             }
         }
 
-        return new HeatmapData(colorMap, earliestAndLatest);
+        return new HeatmapData(colorMap, earliestAndLatest, maxNumAppts);
     }
 
     /**
@@ -144,7 +146,7 @@ public class WeeklyScheduleAction {
      * @param numAppts Number of appointments in an hour timespan.
      * @return String representing the color mapped.
      */
-    private String colorMap(int numAppts, int maxNumAppts) {
+    public String colorMap(int numAppts, int maxNumAppts) {
         int end = 0;
         int start = 180;
         Color clr = new Color(250, 250, 250); //start at white
