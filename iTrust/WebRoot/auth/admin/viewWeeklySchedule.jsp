@@ -29,7 +29,9 @@
         dateString = (dateString == null) ? "" : dateString;
         date = ("".equals(dateString)) ? null : (new SimpleDateFormat("MM/dd/yyyy").parse(dateString));
     } catch (Exception e) {
-        date = null;
+        date = new Date(); //current date
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        dateString = format.format(date);
     }
 %>
 
