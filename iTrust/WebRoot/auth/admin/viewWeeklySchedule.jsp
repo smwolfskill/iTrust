@@ -97,7 +97,21 @@
                     <th style="background-color:#0000FF">aef</th>
                 </tr>-->
             </table>
-
+            <table align="right">
+                <%
+                    for(int i = 0; i <= heatmapData.maxNumAppt; i++) {
+                %>
+                <tr>
+                    <th><%= i %></th>
+                    <%
+                        String colorBlank = action.colorMap(i, heatmapData.maxNumAppt);
+                    %>
+                    <th style="background-color:<%= colorBlank %>"></th>
+                </tr>
+                <%
+                    }
+                %>
+            </table>
     <%
     }
     %>
