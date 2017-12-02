@@ -95,6 +95,8 @@
     </tr>
     <%
         }
+        loggingAction.logEvent(TransactionType.DEATH_TRENDS_VIEW, loggedInMID.longValue(), 0, "");
+
     %>
 </table>
 <table class="fTable" align='center'>

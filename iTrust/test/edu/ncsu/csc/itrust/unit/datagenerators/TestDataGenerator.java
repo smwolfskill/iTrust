@@ -43,6 +43,7 @@ public class TestDataGenerator {
 		if(args != null && args.length > 0 && args[0].equals("-epidemics")) {
 			gen.malaria_epidemic();
 			gen.influenza_epidemic();
+			gen.uc51();
 		}
 	}
 
