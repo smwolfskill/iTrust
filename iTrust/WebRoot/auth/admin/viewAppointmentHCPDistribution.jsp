@@ -7,12 +7,12 @@
         <%@include file="/global.jsp"%>
 
         <%
-            pageTitle = "iTrust - View Appointment Distribution among HCPs";
+            pageTitle = "iTrust - View Appointment Distribution Among HCPs";
         %>
 
         <%@include file="/header.jsp"%>
 
-        <h1>View Appointment Distribution among HCPs</h1>
+        <h1>View Appointment Distribution Among HCPs</h1>
         <br />
 
 
