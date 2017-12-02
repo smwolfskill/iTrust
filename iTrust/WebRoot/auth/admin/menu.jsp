@@ -38,6 +38,7 @@
 	<div class="panel-body" id="view-menu">
 		<ul class="nav nav-sidebar">
 			<li><a href="/iTrust/auth/admin/viewFilteredTransactionLog.jsp">Transaction Log</a></li>
+			<li><a href="/iTrust/auth/admin/viewAppointmentHCPDistribution.jsp">View Appointment Distributions among HCPs</a></li>
 		</ul>
 	</div>
 </div>

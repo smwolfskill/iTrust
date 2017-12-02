@@ -69,15 +69,15 @@ public class ViewAppointmentHCPDistributionTest extends TestCase{
     public void testGetDistribution() throws Exception {
         gen.clearAllTables();
         gen.standardData();
-        //Create a new date on 2012-08-22
+        //Create a new date on 2012-08-22 and 2012-08-23
         Date startDate = new Date(112, 7, 22);
         Date endDate = new Date(112, 7, 23);
         String result = action.getDistribution(startDate, endDate, "all");
-        String trueResult = "<img id=\"chart1\" src=\"https://chart.googleapis.com/chart?" +
-                "chtt=" + Integer.toString(1) + "+Appointments+For+" + "all" + "+-+" +
-                startDate.getMonth() + "-" + startDate.getDay() + "-" + startDate.getYear() + "+to+" +
-                endDate.getMonth() + "-" + endDate.getDay() + "-" + endDate.getYear() + "&amp;" +
-                "cht=p3&amp;chs=400x200&amp;" +
+        String trueResult = "<img id=\"chart1\" width=720 src=\"https://chart.googleapis.com/chart?" +
+                "chtt=" + Integer.toString(1) + "+Appointments+For+" + "all" + "+from+" +
+                startDate.getMonth() + "-" + startDate.getDay() + "-" + Integer.toString(startDate.getYear() + 1900) + "+to+" +
+                endDate.getMonth() + "-" + endDate.getDay() + "-" + Integer.toString(endDate.getYear() + 1900) + "&amp;" +
+                "cht=p3&amp;chs=500x200&amp;" +
                 1 + "&amp;" +
                 "John Zoidberg" + "&amp;" +
                 "chco=E8D0A9|B7AFA3|C1DAD6|F5FAFA|ACD1E9|6D929B\">";

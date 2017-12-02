@@ -48,18 +48,18 @@ public class ViewAppointmentHCPDistributionAction {
         String labels = "chl=";
         String counts = "chd=t:";
         for (Map.Entry<String, Integer> m: hcpApptsCount.entrySet()) {
-            labels += m.getKey() + '|';
-            counts += m.getValue() + ',';
+            labels += m.getKey() + "|";
+            counts += m.getValue() + ",";
             sum += m.getValue();
         }
-        labels.substring(0, labels.length() - 1);
-        counts.substring(0, counts.length() - 1);
+        labels = labels.substring(0, labels.length() - 1);
+        counts = counts.substring(0, counts.length() - 1);
 
-        String result = "<img id=\"chart1\" src=\"https://chart.googleapis.com/chart?" +
-                        "chtt=" + Integer.toString(sum) + "+Appointments+For+" + specialty + "+-+" +
-                        startDate.getMonth() + "-" + startDate.getDay() + "-" + startDate.getYear() + "+to+" +
-                        endDate.getMonth() + "-" + endDate.getDay() + "-" + endDate.getYear() + "&amp;" +
-                        "cht=p3&amp;chs=400x200&amp;" +
+        String result = "<img id=\"chart1\" width=720 src=\"https://chart.googleapis.com/chart?" +
+                        "chtt=" + Integer.toString(sum) + "+Appointments+For+" + specialty + "+from+" +
+                        startDate.getMonth() + "-" + startDate.getDay() + "-" + Integer.toString(startDate.getYear() + 1900) + "+to+" +
+                        endDate.getMonth() + "-" + endDate.getDay() + "-" + Integer.toString(endDate.getYear() + 1900) + "&amp;" +
+                        "cht=p3&amp;chs=500x200&amp;" +
                         counts + "&amp;" +
                         labels + "&amp;" +
                         "chco=E8D0A9|B7AFA3|C1DAD6|F5FAFA|ACD1E9|6D929B\">";
