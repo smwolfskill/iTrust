@@ -44,6 +44,10 @@ public class TestDataGenerator {
 			gen.malaria_epidemic();
 			gen.influenza_epidemic();
 		}
+
+		if(args[0].equals("-HCPDistribution")) {
+			gen.HCPDistribution();
+		}
 	}
 
 	private String DIR = "sql/data";
@@ -918,6 +922,11 @@ public class TestDataGenerator {
 	public void influenza_epidemic() throws SQLException,
 			FileNotFoundException, IOException {
 		new DBBuilder(factory).executeSQLFile(DIR + "/influenzaEpidemic.sql");
+	}
+
+	public void HCPDistribution() throws SQLException,
+			FileNotFoundException, IOException {
+		new DBBuilder(factory).executeSQLFile(DIR + "/hcpDistribution.sql");
 	}
 
 	public void uc22() throws SQLException, FileNotFoundException, IOException {
