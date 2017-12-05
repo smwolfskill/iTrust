@@ -16,6 +16,7 @@ import edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO;
 import edu.ncsu.csc.itrust.dao.mysql.ReferralDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
+import edu.ncsu.csc.itrust.validate.ValidationFormat;
 
 /**
  * Action class for ViewMyMessages.jsp
@@ -298,4 +299,17 @@ public class ViewMyMessagesAction {
 	public List<MessageBean> getCCdMessages(long refID) throws DBException, SQLException{
 		return messageDAO.getCCdMessages(refID);
 	}
+
+	public String validateAndCreateFilter(String nf) {
+		String[] nfs = nf.split(",",-1);
+		try {
+			if (!nfs[4].isEmpty()) new SimpleDateFormat("MM/dd/yyyy").parse(nfs[4]);
+			if (!nfs[5].isEmpty()) new SimpleDateFormat("MM/dd/yyyy").parse(nfs[5]);
+		} catch (ParseException e) {
+			return "Error - Invalid Date";
+		}
+
+		return nf;
+	}
+
 }
