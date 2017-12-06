@@ -78,6 +78,38 @@ public class PreRegisterDAO
         }
     }
 
+    public PreRegisterBean getPreregisteredPatient(long pid) throws DBException
+    {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        PreRegisterBean preRegPatient;
+        try {
+            conn = factory.getConnection();
+            ps = conn.prepareStatement("SELECT p.*, pp.height, pp.weight, pp.smoker FROM PreRegisteredPatients AS pp join Patients as P on" +
+                    " pp.mid = p.mid WHERE DateofDeactivation IS NULL AND p.mid = ?");
+            ps.setLong(1, pid);
+            ResultSet rs = ps.executeQuery();
+            preRegPatient = new PreRegisterBean();
+            while(rs.next())
+            {
+                PatientBean patient = patientLoader.loadSingle(rs);
+                preRegPatient.setPatient(patient);
+                preRegPatient.setHeight(rs.getString("height"));
+                preRegPatient.setWeight(rs.getString("weight"));
+                preRegPatient.setSmoker(rs.getString("smoker"));
+            }
+            rs.close();
+            ps.close();
+            return preRegPatient;
+
+        } catch (SQLException e) {
+
+            throw new DBException(e);
+        } finally {
+            DBUtil.closeConnection(conn, ps);
+        }
+    }
+
     public List<PreRegisterBean> getPreregisteredPatients() throws DBException
     {
         Connection conn = null;

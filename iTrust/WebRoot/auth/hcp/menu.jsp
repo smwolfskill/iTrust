@@ -5,6 +5,7 @@
 	<div class="panel-body" id="info-menu">
 		<ul class="nav nav-sidebar">
 		    <li><a href="/iTrust/auth/hcp-uap/viewPatientOfficeVisitHistory.jsp">All Patients</a>
+            <li><a href="/iTrust/auth/hcp-uap/viewPreregisteredPatients.jsp">Preregistered Patients</a>
 			<li><a href="/iTrust/auth/hcp-uap/viewBasicHealth.jsp">Basic Health Information</a>
 			<li><a href="/iTrust/auth/hcp-uap/editPatient.jsp">Patient Information</a>
 			<li><a href="/iTrust/auth/hcp-uap/editPHR.jsp">PHR Information</a>
