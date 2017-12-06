@@ -231,9 +231,9 @@
         <span style="font-size: 16pt; font-weight: bold;">Patient is deactivated.  Cannot edit.</span>
         <% } %>
         <br /><br />
-        <input type="hidden" id="actionBtn" name="actionType" value="">
-        <input type="submit" name="actionButton" value="Activate Patient" onClick="document.getElementById('actionBtn').value='activate'">
-        <input type="submit" name="actionButton" value="Deactivate Patient" onClick="document.getElementById('actionBtn').value='deactivate'">
+        <input type="hidden" id="actionType" name="actionType" value="">
+        <input type="submit" id="activateBtn" name="actionButton" value="Activate Patient" onClick="document.getElementById('actionType').value='activate'">
+        <input type="submit" id="deactivateBtn" name="actionButton" value="Deactivate Patient" onClick="document.getElementById('actionType').value='deactivate'">
         <span style="font-size: 14px;">
 		Note: in order to set the password for this user, use the "Reset Password" link at the login page.
 	</span>

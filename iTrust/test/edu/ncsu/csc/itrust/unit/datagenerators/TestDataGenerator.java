@@ -648,7 +648,17 @@ public class TestDataGenerator {
 	 */
 	public void patient30() throws FileNotFoundException, SQLException, IOException {
 		new DBBuilder(factory).executeSQLFile(DIR + "/patient30.sql");
-	} 
+	}
+
+	/**
+	 * Adds patient Prereg Person, used in the testing of UC92.
+	 * @throws FileNotFoundException
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	public void patient31() throws FileNotFoundException, SQLException, IOException {
+		new DBBuilder(factory).executeSQLFile(DIR + "/patient31.sql");
+	}
 
 	public void patient42() throws FileNotFoundException, SQLException,
 			IOException {
@@ -1103,6 +1113,9 @@ public class TestDataGenerator {
 		patient28();
 		patient29();
 		patient30();
+
+		//Added for UC92
+		patient31();
 	}
 
 	public void uc47SetUp() throws FileNotFoundException, SQLException,
