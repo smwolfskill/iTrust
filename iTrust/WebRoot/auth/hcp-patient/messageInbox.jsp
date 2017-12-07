@@ -100,26 +100,6 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 			}
 		}
 
-//		//Sorts messages
-//		if(request.getParameter("sort") != null) {
-//			if(request.getParameter("sortby").equals("name")) {
-//				if(request.getParameter("sorthow").equals("asce")) {
-//					messages = action.getAllMyMessagesNameAscending();
-//				} else {
-//					messages = action.getAllMyMessagesNameDescending();
-//				}
-//			} else if(request.getParameter("sortby").equals("time")) {
-//				if(request.getParameter("sorthow").equals("asce")) {
-//					messages = action.getAllMyMessagesTimeAscending();
-//				} else {
-//					messages = action.getAllMyMessages();
-//				}
-//			}
-//		}
-//		else {
-//			messages = action.getAllMyMessages();
-//		}
-
 		//Filters Messages
 		boolean is_filtered = false;
 		if((request.getParameter("filter") != null && request.getParameter("filter").equals("true")) || request.getParameter("testFilter") != null) {
