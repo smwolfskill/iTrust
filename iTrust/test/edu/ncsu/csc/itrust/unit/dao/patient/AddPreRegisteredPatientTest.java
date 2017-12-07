@@ -110,7 +110,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.addPreregisterPatient(pid1,"10","10","0");
 
-        preRegisterDAO.activatePreregisteredPatient(pid1);
+        preRegisterDAO.activatePreregisteredPatient(pid1,90000000L);
 
         assertFalse(preRegisterDAO.checkPreregisteredPatient(pid1));
     }
