@@ -52,7 +52,6 @@
         if( request.getParameter("viewSchedule") != null ) {
             WeeklyScheduleAction.HeatmapData heatmapData = action.getHeatmapForWeekOf(date);
             int earliest = heatmapData.earliestAndLatest.getKey();
-            int latest = heatmapData.earliestAndLatest.getValue();
             %>
             <table align="center" cellspacing="5">
                 <colgroup span="8">

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class WeeklyScheduleAction {
-    public final Color BASE_COLOR = new Color(250,250,250);
+    public final Color BASE_COLOR = new Color(250,250,250);         // color if no appointment
     public final String BASE_COLOR_STR;
     private ApptDAO apptDAO;
 
