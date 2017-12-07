@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ActivatePatientTest extends iTrustSeleniumTest{
 
-    protected WebDriver driver;
+    protected HtmlUnitDriver driver;
 
     @Override
     protected void setUp() throws Exception {
@@ -25,7 +25,7 @@ public class ActivatePatientTest extends iTrustSeleniumTest{
 
     public void testViewPreregisteredPatients() throws Exception {
         //Login
-        driver = login("9000000000", "pw");
+        driver = (HtmlUnitDriver)login("9000000000", "pw");
         assertEquals("iTrust - HCP Home", driver.getTitle());
         assertLogged(TransactionType.HOME_VIEW, 9000000000L, 0L, "");
 
@@ -39,7 +39,7 @@ public class ActivatePatientTest extends iTrustSeleniumTest{
 
     public void testEditPreregisteredPatient() throws Exception {
         //Login
-        driver = login("9000000000", "pw");
+        driver = (HtmlUnitDriver)login("9000000000", "pw");
         assertEquals("iTrust - HCP Home", driver.getTitle());
         assertLogged(TransactionType.HOME_VIEW, 9000000000L, 0L, "");
 
@@ -58,7 +58,8 @@ public class ActivatePatientTest extends iTrustSeleniumTest{
 
     public void testActivatePreregisteredPatient() throws Exception {
         //Login
-        driver = login("9000000000", "pw");
+        driver = (HtmlUnitDriver)login("9000000000", "pw");
+        driver.setJavascriptEnabled(true);
         assertEquals("iTrust - HCP Home", driver.getTitle());
         assertLogged(TransactionType.HOME_VIEW, 9000000000L, 0L, "");
 
@@ -77,7 +78,8 @@ public class ActivatePatientTest extends iTrustSeleniumTest{
 
     public void testDeactivatePreregisteredPatient() throws Exception {
         //Login
-        driver = login("9000000000", "pw");
+        driver = (HtmlUnitDriver)login("9000000000", "pw");
+        driver.setJavascriptEnabled(true);
         assertEquals("iTrust - HCP Home", driver.getTitle());
         assertLogged(TransactionType.HOME_VIEW, 9000000000L, 0L, "");
 
