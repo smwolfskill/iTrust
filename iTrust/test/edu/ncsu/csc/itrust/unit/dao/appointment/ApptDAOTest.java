@@ -1,6 +1,7 @@
 package edu.ncsu.csc.itrust.unit.dao.appointment;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,16 +17,13 @@ import junit.framework.TestCase;
 /**
  * ApptDAOTest --- Class for testing ApptDAO basic functionality, and UC41.1 request.
  *
- * @last_edit   11/03/17, Scott Wolfskill
+ * @last_edit   11/30/17, Scott Wolfskill
  */
 public class ApptDAOTest extends TestCase {
 	private DAOFactory factory = TestDAOFactory.getTestInstance();
 	private ApptDAO apptDAO = factory.getApptDAO();
 
-	/*private ApptBean a1;
-	private ApptBean a2;
-	private ApptBean a3;*/
-	private ApptBean[] appts; //[0..2] are original a1..a3
+	private ApptBean[] appts = null; //[0..2] are original a1..a3
 	
 	long patientMID = 42L;
 	long doctorMID = 9000000000L;
@@ -48,24 +46,27 @@ public class ApptDAOTest extends TestCase {
 			appts[i].setHcp(doctorMID);
 			appts[i].setPatient(patientMID);
  		}
- 		//Original redundant code:
-		/*a1 = new ApptBean();
-		a1.setDate(new Timestamp(new Date().getTime()));
-		a1.setApptType("Ultrasound");
-		a1.setHcp(doctorMID);
-		a1.setPatient(patientMID);
-		
-		a2 = new ApptBean();
-		a2.setDate(new Timestamp(new Date().getTime()+1000*60*15));	//15 minutes later
-		a2.setApptType("Ultrasound");
-		a2.setHcp(doctorMID);
-		a2.setPatient(patientMID);
-		
-		a3 = new ApptBean();
-		a3.setDate(new Timestamp(new Date().getTime()+1000*60*45));	//45 minutes later
-		a3.setApptType("Ultrasound");
-		a3.setHcp(doctorMID);
-		a3.setPatient(patientMID);*/
+	}
+
+	/**
+	 * Test UC_Own
+	 * @throws Exception
+	 */
+	public void testGetApptsForWeekOf() throws Exception {
+		//Test 1. Correct results for positive test
+		apptDAO.scheduleAppt(appts[0]); //now
+		apptDAO.scheduleAppt(appts[3]); //in 1 day exactly
+		apptDAO.scheduleAppt(appts[4]); //in 3 days exactly
+
+		List<ApptBean> weekAppts = apptDAO.getApptsForWeekOf(appts[0].getDate());
+		assertTrue(weekAppts.size() >= 1 && weekAppts.size() <= 3); //could vary depending on current day of week
+
+		//Test 2. Correct results for negative test
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(appts[4].getDate());
+		cal.add(Calendar.HOUR, 24*7); //1 week later
+		weekAppts = apptDAO.getApptsForWeekOf(cal.getTime());
+		assertEquals(0, weekAppts.size());
 	}
 
 	/**
