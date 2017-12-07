@@ -25,7 +25,7 @@
     PreRegisterDAO preRegisterDAO = prodDAO.getPreRegisterDAO();
 %>
 
-<form action="viewReport.jsp" method="post" name="myform">
+<form action="viewPreregisteredPatients.jsp" method="post" name="myform">
     <table class="display fTable" id="patientList" align="center">
         <thead>
             <tr class="">
