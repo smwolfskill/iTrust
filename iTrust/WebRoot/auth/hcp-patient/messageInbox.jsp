@@ -22,8 +22,6 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 <div align=center>
 	<h2>My Messages</h2>
 
-	<%--<%@include file="/auth/hcp-patient/mailbox.jsp" %>--%>
-
 	<%
 		loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0, "");
 		ViewMyMessagesAction action = new ViewMyMessagesAction(prodDAO, loggedInMID.longValue());
@@ -100,26 +98,6 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 			}
 		}
 
-//		//Sorts messages
-//		if(request.getParameter("sort") != null) {
-//			if(request.getParameter("sortby").equals("name")) {
-//				if(request.getParameter("sorthow").equals("asce")) {
-//					messages = action.getAllMyMessagesNameAscending();
-//				} else {
-//					messages = action.getAllMyMessagesNameDescending();
-//				}
-//			} else if(request.getParameter("sortby").equals("time")) {
-//				if(request.getParameter("sorthow").equals("asce")) {
-//					messages = action.getAllMyMessagesTimeAscending();
-//				} else {
-//					messages = action.getAllMyMessages();
-//				}
-//			}
-//		}
-//		else {
-//			messages = action.getAllMyMessages();
-//		}
-
 		//Filters Messages
 		boolean is_filtered = false;
 		if((request.getParameter("filter") != null && request.getParameter("filter").equals("true")) || request.getParameter("testFilter") != null) {
@@ -181,7 +159,7 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 					</tr>
 					<tr style="text-align: center;">
 						<td colspan="3">
-							<input type="submit" name="test" value="Test Filter" />
+							<input type="submit" name="test" value="Test Search" />
 							<input type="submit" name="save" value="Save" />
 							<input type="submit" name="cancel" value="Cancel" />
 						</td>
@@ -198,25 +176,6 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 
 	<form method="post" action="messageInbox.jsp<%= StringEscapeUtils.escapeHtml("" + (is_filtered?"?filter=true":"" )) %>">
 		<table>
-			<%--<tr>--%>
-				<%--<td>--%>
-					<%--<select name="sortby">--%>
-						<%--<option value="time">Sort</option>--%>
-						<%--<option value="name">Name</option>--%>
-						<%--<option value="time">Time</option>--%>
-					<%--</select>--%>
-				<%--</td>--%>
-				<%--<td>--%>
-					<%--<select name="sorthow">--%>
-						<%--<option value="desc">Order</option>--%>
-						<%--<option value="asce">Ascending</option>--%>
-						<%--<option value="desc">Descending</option>--%>
-					<%--</select>--%>
-				<%--</td>--%>
-				<%--<td>--%>
-					<%--<input type="submit" name="sort" value="Sort" />--%>
-				<%--</td>--%>
-			<%--</tr>--%>
 			<tr>
 				<td><a href="messageInbox.jsp?edit=true" >Edit Filter</a></td>
 				<td><a href="messageInbox.jsp?filter=true" >Apply Filter</a></td>
