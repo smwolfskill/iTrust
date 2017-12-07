@@ -51,6 +51,9 @@
 
                     <tr>
                         <td>
+                            Specialty:
+                        </td>
+                        <td>
                             <select name="specialty" id="specialtySelection" selected = "<%= StringEscapeUtils.escapeHtml("" + (specialtySelected)) %>">
                                 <option value="all"> All</option>
                                 <%
