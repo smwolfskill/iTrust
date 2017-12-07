@@ -67,7 +67,7 @@
                     <th>Sat</th>
                 </tr>
                 <%
-                    for(int hour = heatmapData.colorMap[0].length - 1; hour >= 0; hour--) {
+                    for(int hour = 0; hour < heatmapData.colorMap[0].length - 1; hour++) {
                         %>
                         <tr>
                             <th><%= action.hourOfDay_toString(hour + earliest) %></th>
