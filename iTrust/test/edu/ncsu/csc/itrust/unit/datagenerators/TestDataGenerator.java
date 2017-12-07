@@ -39,16 +39,18 @@ public class TestDataGenerator {
 		gen.clearAllTables();
 		gen.standardData();
 
-		//Load epidemic data
-		if(args != null && args.length > 0 && args[0].equals("-epidemics")) {
-			gen.malaria_epidemic();
-			gen.influenza_epidemic();
-			gen.uc51();
+		if(args != null && args.length > 0) {
+			if(args[0].equals("-all") || args[0].equals("-epidemics")) { //Load epidemic data
+				gen.malaria_epidemic();
+				gen.influenza_epidemic();
+				gen.uc51();
+			}
+			if(args[0].equals("-all") || args[0].equals("-HCPDistribution")) { //Load UC_Own additional appts
+				gen.HCPDistribution();
+			}
 		}
 
-		if(args[0].equals("-HCPDistribution")) {
-			gen.HCPDistribution();
-		}
+
 	}
 
 	private String DIR = "sql/data";
