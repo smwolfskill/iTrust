@@ -4,8 +4,10 @@ import edu.ncsu.csc.itrust.action.base.PersonnelBaseAction;
 import edu.ncsu.csc.itrust.beans.PersonnelBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
+import edu.ncsu.csc.itrust.dao.mysql.MessageFilterDAO;
 import edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO;
 import edu.ncsu.csc.itrust.enums.Role;
+import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
 import edu.ncsu.csc.itrust.validate.PersonnelValidator;
@@ -19,7 +21,8 @@ import edu.ncsu.csc.itrust.validate.PersonnelValidator;
 public class EditPersonnelAction extends PersonnelBaseAction {
 	private PersonnelDAO personnelDAO;
 	private AuthDAO authDAO;
-	private PersonnelValidator validator = new PersonnelValidator();;
+	private PersonnelValidator validator = new PersonnelValidator();
+	private MessageFilterDAO messageFilterDAO;
 
 	/**
 	 * Super class validates the patient id
@@ -44,6 +47,7 @@ public class EditPersonnelAction extends PersonnelBaseAction {
 			throw new ITrustException("You are not authorized to edit this record!");
 		}
 		this.personnelDAO = factory.getPersonnelDAO();
+		this.messageFilterDAO = factory.getMessageFilterDAO();
 	}
 
 	/**
@@ -59,6 +63,10 @@ public class EditPersonnelAction extends PersonnelBaseAction {
 		personnelForm.setMID(pid);
 		validator.validate(personnelForm);
 		personnelDAO.editPersonnel(personnelForm);
+	}
+
+	public void editMessageFilter(long MID, String nf) throws DBException {
+		messageFilterDAO.editMessageFilter(MID, nf);
 	}
 	
 }

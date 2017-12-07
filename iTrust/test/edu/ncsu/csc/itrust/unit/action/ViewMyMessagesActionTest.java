@@ -299,4 +299,15 @@ public class ViewMyMessagesActionTest extends TestCase {
 			assertNull(resultList);
 		}
 	}
+
+	public void testValidateAndCreateFilter() {
+		String nf = "Andy Programmer,Scratchy Throat,,asdasdasd,13/13/2020,";
+		assertEquals(evilAction.validateAndCreateFilter(nf), nf);
+	}
+
+	public void testValidateAndCreateFilter_invalidDate() {
+		String nf = "Andy Programmer,Scratchy Throat,,asdasdasd,132020,";
+		assertEquals(evilAction.validateAndCreateFilter(nf), "Error - Invalid Date");
+	}
+
 }
