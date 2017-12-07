@@ -215,7 +215,7 @@
                     </tr>
                     <tr>
                         <td class="subHeaderVertical">Weight:</td>
-                        <td><input type=text name="weightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getWeight() != null ? pr.getHeight() : "")) %>">
+                        <td><input type=text name="weightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getWeight() != null ? pr.getWeight() : "")) %>">
                         </td>
                     </tr>
                     <tr>

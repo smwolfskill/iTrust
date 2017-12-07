@@ -8,6 +8,7 @@ import edu.ncsu.csc.itrust.beans.PreRegisterBean;
 import edu.ncsu.csc.itrust.beans.loaders.PatientLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -147,7 +148,7 @@ public class PreRegisterDAO
         }
     }
 
-    public boolean activatePreregisteredPatient(long pid,long hcpid) throws DBException
+    public boolean activatePreregisteredPatient(long pid,long hcpid) throws DBException,ITrustException
     {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -164,6 +165,7 @@ public class PreRegisterDAO
 
             hr.setPatientID(pid);
             hr.setPersonnelID(hcpid);
+            hr.setOfficeVisitID(1L);
             if(pr.getHeight()!= null)
                 hr.setHeight(Double.parseDouble(pr.getHeight()));
             if(pr.getWeight() != null)
