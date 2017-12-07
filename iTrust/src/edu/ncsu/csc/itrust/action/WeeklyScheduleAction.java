@@ -72,12 +72,12 @@ public class WeeklyScheduleAction {
         int earliest = earliestAndLatest.getKey();
         int latest = earliestAndLatest.getValue();
         int[][] apptsByDayByHour = new int[7][latest-earliest+1];
-        for(int day = 0; day < apptsByDayByHour.length; day++) {
+        for(int day = 0; day < apptsByDayByHour.length; day++) { //initialize #appts to 0
             for(int hour = 0; hour < apptsByDayByHour[0].length; hour++) {
                 apptsByDayByHour[day][hour] = 0;
             }
         }
-        int maxNumAppts = getMaxNumAppts(appts, apptsByDayByHour, earliest);
+        int maxNumAppts = setApptsArray(appts, apptsByDayByHour, earliest); //set appts array and get max #appts
 
         String[][] colorMap = new String[7][latest-earliest+1]; //[#cols][#rows]
         //Assign colors
@@ -103,13 +103,13 @@ public class WeeklyScheduleAction {
     }
 
     /**
-     * Get the maximum number of appointments in an hour
+     * Fill in appointments by day and hour and return the max number of appts. in an hour.
      * @param appts list of appointments
      * @param apptsByDayByHour [day][hour] = #appts in day at hour (earliest + hour)
      * @param earliest Military time-based earliest appointment hour in the week.
      * @return max number of appts. in a given hour.
      */
-    private int getMaxNumAppts(List<ApptBean> appts, int[][] apptsByDayByHour, int earliest) {
+    private int setApptsArray(List<ApptBean> appts, int[][] apptsByDayByHour, int earliest) {
         Calendar cal = Calendar.getInstance();
         int max = 0;
 
