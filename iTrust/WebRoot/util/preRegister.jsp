@@ -258,6 +258,9 @@
                     long pid = new AddPatientAction(prodDAO, adminMID).addPreRegisteredPatient(p, height, weight, smoker == null ? "0" : "1");
                     returnMessage = "Account pre-registered. Your MID is " + pid + ".";
                     loggingAction.logEvent(TransactionType.PATIENT_CREATE, pid, 0, "");
+        %>
+        <span style="display:none" id="midSpan" dataMid="<%= "" + pid %>"></span>
+        <%
                 } else if (pass != null && !pass.equals("") && !confirmPass.equals("")) {
                     returnMessage = "Password does not match.";
                     color = "red";

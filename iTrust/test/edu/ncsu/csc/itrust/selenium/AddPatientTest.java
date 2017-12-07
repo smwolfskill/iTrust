@@ -5,11 +5,8 @@ import org.openqa.selenium.WebDriver;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
 public class AddPatientTest extends iTrustSeleniumTest{
@@ -110,7 +107,13 @@ public class AddPatientTest extends iTrustSeleniumTest{
 		htmlDriver.findElement(By.xpath("//input[@name='password']")).sendKeys("abc123");
 		htmlDriver.findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("abc123");
 		htmlDriver.findElement(By.xpath("//input[@value='Submit']")).click();
-		assertTrue(htmlDriver.findElement(By.xpath("//body")).getText().contains("Account pre-registered"));
+		assertTrue(htmlDriver.findElement(By.id("returnMessage")).getText().contains("Account pre-registered"));
+		String mid = htmlDriver.findElement(By.id("midSpan")).getAttribute("dataMid");
+		assertLogged(TransactionType.PATIENT_CREATE, Long.parseLong(mid), 0L, "");
 
+		//Login as the new patient
+		driver = login(mid, "abc123");
+		assertEquals("iTrust - Pre-Registered", driver.getTitle());
+		assertLogged(TransactionType.LOGIN_SUCCESS, Long.parseLong(mid), Long.parseLong(mid), "");
 	}
 }
