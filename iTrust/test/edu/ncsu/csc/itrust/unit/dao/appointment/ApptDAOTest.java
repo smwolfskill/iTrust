@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import edu.ncsu.csc.itrust.beans.ApptBean;
 import edu.ncsu.csc.itrust.beans.ApptTypeBean;
@@ -184,5 +185,21 @@ public class ApptDAOTest extends TestCase {
 		assertEquals(30, type.getDuration());
 		assertEquals("Ultrasound", type.getName());
 	}
-	
+
+	/**
+	 * Test to see if getting filtered number of appointments for each hcp is working correctly.
+	 * @throws Exception
+	 */
+	public void testGetAppointmentCountByHCP() throws Exception {
+		TestDataGenerator gen = new TestDataGenerator();
+		gen.clearAllTables();
+		gen.standardData();
+		ApptDAO apptDAO = factory.getApptDAO();
+		//Create a new date on 2017-12-07 and 2017-12-08
+		Date startDate = new Date(117, 11, 7);
+		Date endDate = new Date(117, 11, 9);
+		Map<String, Integer> result = apptDAO.getAppointmentCountByHCP(startDate, endDate, "surgeon");
+		assertEquals(1, result.size());
+		assertEquals(2, (int) result.get("Kelly Doctor"));
+	}
 }

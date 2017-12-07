@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.List;
 
@@ -587,6 +588,34 @@ public class PersonnelDAO {
 			throw new DBException(e);
 		} finally {
 			DBUtil.closeConnection(conn, ps);
+		}
+	}
+
+	/**
+	 * Returns all specialties of hcps
+	 *
+	 * @return A java.util.List of PersonnelBean that have different specialties.
+	 * @throws DBException
+	 */
+	public List<String> getAllSpecialties()  throws DBException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = factory.getConnection();
+			pstmt = conn.prepareStatement("SELECT DISTINCT specialty FROM personnel where specialty <> '';");
+			final ResultSet results = pstmt.executeQuery();
+			List<String> specialties = new ArrayList<>();
+			while (results.next()) {
+				specialties.add(results.getString("specialty"));
+			}
+			results.close();
+			pstmt.close();
+			return specialties;
+		} catch (SQLException e) {
+
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, pstmt);
 		}
 	}
 }

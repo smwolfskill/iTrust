@@ -6,7 +6,10 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.ApptBean;
 import edu.ncsu.csc.itrust.beans.loaders.ApptBeanLoader;
@@ -405,5 +408,52 @@ public class ApptDAO {
 	}
 		
 
+	}
+
+	/**
+	 *
+	 * @param startDate the beginning of the date range to search for appointments
+	 * @param endDate   the end of the date range to search for appointments
+	 * @param specialty either "all" or a specialty that serves as a filter on searching appointments
+	 * @return a map from each hcp (from the specified specialty) names to its appointment count within the date range
+	 * @throws DBException
+	 */
+	public Map<String, Integer> getAppointmentCountByHCP (java.util.Date startDate, Date endDate, String specialty) throws DBException{
+		Connection conn = null;
+		PreparedStatement pstring = null;
+		try{
+			conn = factory.getConnection();
+
+			pstring = conn.prepareStatement("SELECT COUNT(appt_id) as countOfAppt, p.firstName as firstName, p.lastName as lastName " +
+												 "FROM appointment a JOIN personnel p " +
+												 "ON a.doctor_id = p.MID " +
+												 "WHERE sched_date <= ? " +
+											 	 "AND sched_date >= ? " +
+												 "AND (p.specialty = ? OR ? = 'all') " +
+												 "GROUP BY p.firstName, p.lastName;");
+
+			pstring.setTimestamp(1, new Timestamp(endDate.getTime()));
+			pstring.setTimestamp(2, new Timestamp(startDate.getTime()));
+			pstring.setString(3, specialty);
+			pstring.setString(4, specialty);
+
+			final ResultSet results = pstring.executeQuery();
+			Map<String, Integer> hcpApptsCount = new HashMap<>();
+			while(results.next()) {
+				int count = results.getInt("countOfAppt");
+				String firstName = results.getString("firstName");
+				String lastName = results.getString("lastName");
+				String fullName = firstName + ' ' + lastName;
+				hcpApptsCount.put(fullName, count);
+			}
+			results.close();
+			pstring.close();
+			return hcpApptsCount;
+		} catch (SQLException e) {
+
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, pstring);
+		}
 	}
 }
