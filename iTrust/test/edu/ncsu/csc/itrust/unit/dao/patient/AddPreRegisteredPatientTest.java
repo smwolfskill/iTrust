@@ -59,7 +59,7 @@ public class AddPreRegisteredPatientTest extends TestCase
         assertFalse(preRegisterDAO.checkPreregisteredPatient(pid));
     }
 
-    public void testGetPreregisterPatient() throws Exception
+    public void testGetPreregisterPatients() throws Exception
     {
         PatientBean p1 = new PatientBean();
         p1.setFirstName("John");
@@ -76,6 +76,26 @@ public class AddPreRegisteredPatientTest extends TestCase
         List<PreRegisterBean> preRegPat = preRegisterDAO.getPreregisteredPatients();
         assertEquals(1,preRegPat.size());
         assertEquals("John",preRegPat.get(0).getPatient().getFirstName());
+    }
+
+    public void testGetPreregisterPatient() throws Exception
+    {
+        PatientBean p1 = new PatientBean();
+        p1.setFirstName("John");
+        p1.setLastName("Doe");
+        p1.setEmail("abc@xyz.com");
+        long pid1 = patientDAO.addEmptyPatient();
+        p1.setMID(pid1);
+        patientDAO.editPatient(p1, pid1);
+
+        preRegisterDAO.addPreregisterPatient(pid1,"10","10","0");
+
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid1));
+
+        PreRegisterBean preRegPat = preRegisterDAO.getPreregisteredPatient(pid1);
+
+        assertEquals("John",preRegPat.getPatient().getFirstName());
+
     }
 
     public void testActivatePreregisteredPatient() throws Exception
