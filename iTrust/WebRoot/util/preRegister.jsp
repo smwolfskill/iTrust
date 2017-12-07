@@ -1,9 +1,8 @@
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
-<%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
-<%@ page import="edu.ncsu.csc.itrust.beans.PatientBean" %>
-<%@ page import="edu.ncsu.csc.itrust.action.*" %>
-<%@ page import="edu.ncsu.csc.itrust.validate.PatientValidator" %>
-<%@ page import="edu.ncsu.csc.itrust.dao.mysql.PatientDAO" %>
+<%@page import="edu.ncsu.csc.itrust.beans.PatientBean" %>
+<%@page import="edu.ncsu.csc.itrust.action.*" %>
+<%@page import="edu.ncsu.csc.itrust.validate.PatientValidator" %>
+<%@page import="edu.ncsu.csc.itrust.dao.mysql.PatientDAO" %>
 
 <%@include file="/global.jsp"%>
 
