@@ -191,6 +191,10 @@ public class DAOFactory {
 		return new PersonnelDAO(this);
 	}
 
+	public MessageFilterDAO getMessageFilterDAO() {
+		return new MessageFilterDAO(this);
+	}
+
 	/**
 	 * 
 	 * @return this DAOFactory's ReferralDAO
