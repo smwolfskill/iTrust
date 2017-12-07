@@ -17,7 +17,21 @@ public class WeeklyScheduleAction {
     public final String BASE_COLOR_STR;
     private ApptDAO apptDAO;
 
-    //private final long MILLIS_PER_DAY = 1000*60*60*24L;
+    /**
+     * HeatmapData --- Contains data returned by getHeatmapForWeekOf representing
+     *                 a heatmap of a week's appointment distribution.
+     */
+    public class HeatmapData {
+        public String[][] colorMap; //[day][hour] = color to show for day at hour (earliest + hour)
+        public Pair<Integer,Integer> earliestAndLatest; //(earliest, latest)
+        public int maxNumAppt = -1; //maximum #appts in an hour
+        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest, int maxNumAppt) {
+            this.colorMap = colorMap;
+            this.earliestAndLatest = earliestAndLatest;
+            this.maxNumAppt = maxNumAppt;
+        }
+    }
+
 
     public WeeklyScheduleAction (DAOFactory factory){
         apptDAO = factory.getApptDAO();
@@ -39,17 +53,14 @@ public class WeeklyScheduleAction {
         }
     }
 
-    public class HeatmapData {
-        public String[][] colorMap;
-        public Pair<Integer,Integer> earliestAndLatest;
-        public int maxNumAppt = -1;
-        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest, int maxNumAppt) {
-            this.colorMap = colorMap;
-            this.earliestAndLatest = earliestAndLatest;
-            this.maxNumAppt = maxNumAppt;
-        }
-    }
 
+
+    /**
+     * get heat map data of a week's appointment distribution
+     * @param date is the date to get the week of
+     * @return the data of heat map
+     * @throws ITrustException
+     */
     public HeatmapData getHeatmapForWeekOf(Date date) throws ITrustException {
         List<ApptBean> appts = null;
         try {
@@ -92,9 +103,10 @@ public class WeeklyScheduleAction {
     }
 
     /**
-     *
-     * @param appts
-     * @param apptsByDayByHour
+     * Get the maximum number of appointments in an hour
+     * @param appts list of appointments
+     * @param apptsByDayByHour [day][hour] = #appts in day at hour (earliest + hour)
+     * @param earliest Military time-based earliest appointment hour in the week.
      * @return max number of appts. in a given hour.
      */
     private int getMaxNumAppts(List<ApptBean> appts, int[][] apptsByDayByHour, int earliest) {
@@ -147,6 +159,7 @@ public class WeeklyScheduleAction {
     /**
      * Map number of appointments to a color.
      * @param numAppts Number of appointments in an hour timespan.
+     * @param maxNumAppts the maximum number of appointments in an hour
      * @return String representing the color mapped.
      */
     public String colorMap(int numAppts, int maxNumAppts) {
@@ -154,13 +167,17 @@ public class WeeklyScheduleAction {
         int start = 180;
         Color clr = BASE_COLOR; //start at white
         if(maxNumAppts != 0 && numAppts != 0) {
-            //int val = 255 - (numAppts * 255 / maxNumAppts);
             int val = start + numAppts * ((end - start) / maxNumAppts);
             clr = new Color(250, val, val);
         }
         return colorToHexStr(clr);
     }
 
+    /**
+     * convert the color code to hex string
+     * @param clr the color
+     * @return "#RRGGBB"
+     */
     private String colorToHexStr(Color clr) {
         String map = "#" + Integer.toHexString(clr.getRed());
         if(clr.getGreen() < 16) {
