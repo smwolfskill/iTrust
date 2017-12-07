@@ -8,8 +8,7 @@ import edu.ncsu.csc.itrust.exception.ITrustException;
 import javafx.util.Pair;
 
 import java.awt.*;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 public class WeeklyScheduleAction {
@@ -24,10 +23,14 @@ public class WeeklyScheduleAction {
     public class HeatmapData {
         public String[][] colorMap; //[day][hour] = color to show for day at hour (earliest + hour)
         public Pair<Integer,Integer> earliestAndLatest; //(earliest, latest)
+        public ArrayList<Integer> apptEntries; //sorted array of all appt entries per hour, excluding duplicates
         public int maxNumAppt = -1; //maximum #appts in an hour
-        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest, int maxNumAppt) {
+
+        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest,
+                           ArrayList<Integer> apptEntries, int maxNumAppt) {
             this.colorMap = colorMap;
             this.earliestAndLatest = earliestAndLatest;
+            this.apptEntries = apptEntries;
             this.maxNumAppt = maxNumAppt;
         }
     }
@@ -62,15 +65,20 @@ public class WeeklyScheduleAction {
      * @throws ITrustException
      */
     public HeatmapData getHeatmapForWeekOf(Date date) throws ITrustException {
+        //1. Get appointments for week of (date)
         List<ApptBean> appts = null;
         try {
             appts = apptDAO.getApptsForWeekOf(date);
         } catch (DBException e) {
             throw new ITrustException(e.getMessage());
         }
+
+        //2. Get earliest and latest times
         Pair<Integer,Integer> earliestAndLatest = getEarliestAndLatestTime(appts);
         int earliest = earliestAndLatest.getKey();
         int latest = earliestAndLatest.getValue();
+
+        //3. Assign appointments by hour array
         int[][] apptsByDayByHour = new int[7][latest-earliest+1];
         for(int day = 0; day < apptsByDayByHour.length; day++) { //initialize #appts to 0
             for(int hour = 0; hour < apptsByDayByHour[0].length; hour++) {
@@ -79,6 +87,10 @@ public class WeeklyScheduleAction {
         }
         int maxNumAppts = setApptsArray(appts, apptsByDayByHour, earliest); //set appts array and get max #appts
 
+        //4.
+        ArrayList<Integer> apptEntries = getDistinctApptEntries(apptsByDayByHour);
+
+        //5. Assign colormap
         String[][] colorMap = new String[7][latest-earliest+1]; //[#cols][#rows]
         //Assign colors
         for(int day = 0; day < colorMap.length; day++) {
@@ -87,7 +99,7 @@ public class WeeklyScheduleAction {
             }
         }
 
-        return new HeatmapData(colorMap, earliestAndLatest, maxNumAppts);
+        return new HeatmapData(colorMap, earliestAndLatest, apptEntries, maxNumAppts);
     }
 
     /**
@@ -154,6 +166,20 @@ public class WeeklyScheduleAction {
             latestHour = 19;
         }
         return new Pair<Integer, Integer>(earliestHour, latestHour);
+    }
+
+    private ArrayList<Integer> getDistinctApptEntries(int[][] apptsByDayByHour) {
+        HashSet<Integer> apptEntries = new HashSet<>();
+        for(int day = 0; day < apptsByDayByHour.length; day++) {
+            for(int hour = 0; hour < apptsByDayByHour[0].length; hour++) {
+                apptEntries.add(apptsByDayByHour[day][hour]); //will not insert if present
+            }
+        }
+
+        //Sort in ascending order and return
+        ArrayList<Integer> sorted = new ArrayList<Integer>(apptEntries);
+        Collections.sort(sorted);
+        return sorted;
     }
 
     /**

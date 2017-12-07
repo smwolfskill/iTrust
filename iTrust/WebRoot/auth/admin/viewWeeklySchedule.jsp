@@ -67,7 +67,7 @@
                     <th>Sat</th>
                 </tr>
                 <%
-                    for(int hour = 0; hour < heatmapData.colorMap[0].length - 1; hour++) {
+                    for(int hour = 0; hour < heatmapData.colorMap[0].length; hour++) {
                         %>
                         <tr>
                             <th><%= action.hourOfDay_toString(hour + earliest) %></th>
@@ -85,13 +85,14 @@
             </table>
             <table align="right">
                 <%
-                    for(int i = 0; i <= heatmapData.maxNumAppt; i++) {
+                    for(int i = 0; i < heatmapData.apptEntries.size(); i++) {
                 %>
                 <tr>
-                    <th><%= i %></th>
                     <%
-                        String colorBlank = action.colorMap(i, heatmapData.maxNumAppt);
+                        int apptCount = heatmapData.apptEntries.get(i);
+                        String colorBlank = action.colorMap(apptCount, heatmapData.maxNumAppt);
                     %>
+                    <th><%= apptCount %></th>
                     <th style="background-color:<%= colorBlank %>"></th>
                 </tr>
                 <%

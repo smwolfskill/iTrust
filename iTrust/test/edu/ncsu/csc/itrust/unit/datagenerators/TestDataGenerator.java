@@ -48,6 +48,9 @@ public class TestDataGenerator {
 			if(args[0].equals("-all") || args[0].equals("-HCPDistribution")) { //Load UC_Own additional appts
 				gen.HCPDistribution();
 			}
+			if(args[0].equals("-all") || args[0].equals("-heatmap")) { //Load UC_Own additional appts for pretty heatmap
+				gen.heatmapAppts();
+			}
 		}
 
 
@@ -284,6 +287,11 @@ public class TestDataGenerator {
 	public void healthData() throws SQLException, FileNotFoundException,
 			IOException {
 		new DBBuilder(factory).executeSQLFile(DIR + "/healthdata.sql");
+	}
+
+	public void heatmapAppts() throws SQLException, FileNotFoundException,
+			IOException {
+		new DBBuilder(factory).executeSQLFile(DIR + "/appointment_heatmap.sql");
 	}
 
 	public void hospitals() throws SQLException, FileNotFoundException,
