@@ -2,9 +2,6 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="edu.ncsu.csc.itrust.action.WeeklyScheduleAction" %>
-<%@ page import="edu.ncsu.csc.itrust.beans.ApptBean" %>
-<%@ page import="java.util.List" %>
-<%@ page import="javafx.util.Pair" %>
 
 <%@include file="/global.jsp"%>
 
@@ -86,15 +83,6 @@
                         <%
                     }
                 %>
-                <!--<tr>
-                    <th></th>
-                    <th style="background-color:#0000FF">1</th>
-                    <th style="background-color:#000088">1481348143714</th>
-                </tr>
-                <tr>
-                    <th style="background-color:#00008F">           </th>
-                    <th style="background-color:#0000FF">aef</th>
-                </tr>-->
             </table>
             <table align="right">
                 <%
