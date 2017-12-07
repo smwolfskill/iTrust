@@ -1,13 +1,18 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
+import com.sun.jna.platform.win32.Sspi;
 import edu.ncsu.csc.itrust.DBUtil;
+import edu.ncsu.csc.itrust.beans.HealthRecord;
 import edu.ncsu.csc.itrust.beans.PatientBean;
 import edu.ncsu.csc.itrust.beans.PreRegisterBean;
 import edu.ncsu.csc.itrust.beans.loaders.PatientLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -143,16 +148,36 @@ public class PreRegisterDAO
         }
     }
 
-    public boolean activatePreregisteredPatient(long pid) throws DBException
+    public boolean activatePreregisteredPatient(long pid,long hcpid) throws DBException,ITrustException
     {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
+            PreRegisterBean pr = getPreregisteredPatient(pid);
             conn = factory.getConnection();
             ps = conn.prepareStatement("DELETE FROM PreRegisteredPatients WHERE mid = ?");
             ps.setLong(1, pid);
             ps.executeUpdate();
             ps.close();
+
+            // Adding health record of patient
+            HealthRecord hr = new HealthRecord();
+
+            hr.setPatientID(pid);
+            hr.setPersonnelID(hcpid);
+            hr.setOfficeVisitID(1L);
+            if(pr.getHeight()!= null)
+                hr.setHeight(Double.parseDouble(pr.getHeight()));
+            if(pr.getWeight() != null)
+                hr.setWeight(Double.parseDouble(pr.getHeight()));
+            hr.setSmoker(Integer.parseInt(pr.getSmoker()));
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+            Date date = new Date(Calendar.getInstance().getTime().getTime());
+            String dateStr = df.format(date);
+            hr.setOfficeVisitDateStr(dateStr);
+
+            factory.getHealthRecordsDAO().add(hr);
+
             return true;
 
         } catch (SQLException e) {

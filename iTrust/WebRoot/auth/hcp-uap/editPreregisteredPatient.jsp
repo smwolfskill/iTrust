@@ -39,7 +39,7 @@
 
     if (request.getParameter("actionType") != null) {
         if (request.getParameter("actionType").equals("activate")) {
-            preRegisterDAO.activatePreregisteredPatient(Long.parseLong(pidString));
+            preRegisterDAO.activatePreregisteredPatient(Long.parseLong(pidString),loggedInMID.longValue());
             loggingAction.logEvent(TransactionType.PREREGISTERED_PATIENT_ACTIVATE, loggedInMID.longValue(), Long.parseLong(pidString), "");
 %>
 <br />
@@ -70,8 +70,12 @@
         pr = new PreRegisterBean();
         pr.setPatient(p);
         pr.setMid(Long.parseLong(pidString));
-        pr.setHeight(request.getParameter("heightStr"));
-        pr.setWeight(request.getParameter("weightStr"));
+
+        if(request.getParameter("heightStr") != "")
+            pr.setHeight(request.getParameter("heightStr"));
+
+        if(request.getParameter("heightStr") != "")
+            pr.setWeight(request.getParameter("weightStr"));
         pr.setSmoker(request.getParameter("smokerStr"));
         try {
             preRegisterDAO.editPreregisteredPatient(pr, Long.parseLong(pidString));
@@ -206,12 +210,12 @@
                     </tr>
                     <tr>
                         <td class="subHeaderVertical">Height:</td>
-                        <td><input type=text name="heightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getHeight())) %>">
+                        <td><input type=text name="heightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getHeight() != null ? pr.getHeight() : "")) %>">
                         </td>
                     </tr>
                     <tr>
                         <td class="subHeaderVertical">Weight:</td>
-                        <td><input type=text name="weightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getWeight())) %>">
+                        <td><input type=text name="weightStr" value="<%= StringEscapeUtils.escapeHtml("" + (pr.getWeight() != null ? pr.getWeight() : "")) %>">
                         </td>
                     </tr>
                     <tr>
