@@ -195,9 +195,14 @@ public class ApptDAOTest extends TestCase {
 		gen.clearAllTables();
 		gen.standardData();
 		ApptDAO apptDAO = factory.getApptDAO();
-		//Create a new date on 2017-12-07 and 2017-12-08
-		Date startDate = new Date(117, 11, 7);
-		Date endDate = new Date(117, 11, 9);
+		//Create a new date on today + 7 and today + 11
+		Date today = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(today);
+		cal.add(Calendar.DATE, 7);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DATE, 4);
+		Date endDate = cal.getTime();
 		Map<String, Integer> result = apptDAO.getAppointmentCountByHCP(startDate, endDate, "surgeon");
 		assertEquals(1, result.size());
 		assertEquals(2, (int) result.get("Kelly Doctor"));
