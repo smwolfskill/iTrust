@@ -74,8 +74,8 @@ public class AddPreRegisteredPatientTest extends TestCase
         assertTrue(preRegisterDAO.checkPreregisteredPatient(pid1));
 
         List<PreRegisterBean> preRegPat = preRegisterDAO.getPreregisteredPatients();
-        assertEquals(1,preRegPat.size());
-        assertEquals("John",preRegPat.get(0).getPatient().getFirstName());
+        assertEquals(2,preRegPat.size());
+        assertEquals("Prereg",preRegPat.get(0).getPatient().getFirstName());
     }
 
     public void testGetPreregisterPatient() throws Exception
@@ -131,7 +131,7 @@ public class AddPreRegisteredPatientTest extends TestCase
         preRegisterDAO.deactivatePreregisteredPatient(pid1);
 
         List<PreRegisterBean> preRegPat = preRegisterDAO.getPreregisteredPatients();
-        assertEquals(0,preRegPat.size());
+        assertEquals(1,preRegPat.size());
 
     }
 
@@ -155,7 +155,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preReg.getPatient().setFirstName("Joe");
         preRegisterDAO.editPreregisteredPatient(preReg,pid1);
-        PreRegisterBean preRegPat = preRegisterDAO.getPreregisteredPatients().get(0);
+        PreRegisterBean preRegPat = preRegisterDAO.getPreregisteredPatient(pid1);
 
         assertEquals("Joe",preRegPat.getPatient().getFirstName());
 
