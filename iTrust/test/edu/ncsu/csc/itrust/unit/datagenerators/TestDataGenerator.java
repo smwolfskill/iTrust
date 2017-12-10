@@ -45,11 +45,14 @@ public class TestDataGenerator {
 				gen.influenza_epidemic();
 				gen.uc51();
 			}
-			if(args[0].equals("-all") || args[0].equals("-HCPDistribution")) { //Load UC_Own additional appts
+			if(args[0].equals("-all") || args[0].equals("-HCPDistribution")) { //Load UC_Own_1 additional appts
 				gen.HCPDistribution();
 			}
-			if(args[0].equals("-all") || args[0].equals("-heatmap")) { //Load UC_Own additional appts for pretty heatmap
+			if(args[0].equals("-all") || args[0].equals("-heatmap")) { //Load UC_Own_2 additional appts for pretty heatmap
 				gen.heatmapAppts();
+			}
+			if(args[0].equals("-all") || args[0].equals("-preregister")) { //Added for UC92
+				gen.patient31();
 			}
 		}
 
@@ -1133,9 +1136,6 @@ public class TestDataGenerator {
 		patient28();
 		patient29();
 		patient30();
-
-		//Added for UC92
-		patient31();
 	}
 
 	public void uc47SetUp() throws FileNotFoundException, SQLException,
