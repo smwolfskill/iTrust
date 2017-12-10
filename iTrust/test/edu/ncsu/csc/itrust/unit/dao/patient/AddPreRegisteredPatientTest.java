@@ -17,7 +17,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
     protected void setUp() throws Exception {
         gen.clearAllTables();
-        gen.standardData();
+        gen.patient31();
     }
 
     public void testPosPreregisterPatient() throws Exception
