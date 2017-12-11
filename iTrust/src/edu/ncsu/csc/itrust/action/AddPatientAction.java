@@ -85,7 +85,7 @@ public class AddPatientAction {
 		String pwd = authDAO.addUser(newMID, Role.PATIENT, p.getPassword());
 		p.setPassword(pwd);
 		p.setConfirmPassword(pwd);
-		patientDAO.editPatient(p,personnelDAO.searchForPersonnelWithName("Shape","Shifter").get(0).getMID());
+		patientDAO.editPatient(p,personnelDAO.getPersonnelMid("Shape","Shifter"));
 		preRegisterDAO.addPreregisterPatient(p.getMID(),height,weight,smoker);
 		return newMID;
 	}
