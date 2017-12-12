@@ -21,4 +21,9 @@ public class MessageFilterDAOTest extends TestCase {
         messageFilterDAO.editMessageFilter(90000000000L, "ASD");
         assertEquals("ASD", messageFilterDAO.getMessageFilter(90000000000L));
     }
+
+    public void testGetMessageFilter_notExistingMid() throws DBException {
+        assertEquals("", messageFilterDAO.getMessageFilter(911111));
+    }
+
 }

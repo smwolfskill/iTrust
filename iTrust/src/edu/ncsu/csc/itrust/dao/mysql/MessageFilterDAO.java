@@ -1,7 +1,6 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
 import edu.ncsu.csc.itrust.DBUtil;
-import edu.ncsu.csc.itrust.action.EditPersonnelAction;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
 
@@ -28,8 +27,6 @@ public class MessageFilterDAO {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getErrorCode());
             throw new DBException(e);
         } finally {
             DBUtil.closeConnection(conn, pstmt);
@@ -52,7 +49,6 @@ public class MessageFilterDAO {
             pstmt.close();
             return resultString;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DBException(e);
         } finally {
             DBUtil.closeConnection(conn, pstmt);
