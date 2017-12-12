@@ -148,7 +148,7 @@ public class PreRegisterDAO
             if(pr.getHeight()!= null)
                 hr.setHeight(Double.parseDouble(pr.getHeight()));
             if(pr.getWeight() != null)
-                hr.setWeight(Double.parseDouble(pr.getHeight()));
+                hr.setWeight(Double.parseDouble(pr.getWeight()));
             hr.setSmoker(Integer.parseInt(pr.getSmoker()));
             DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
             Date date = new Date(Calendar.getInstance().getTime().getTime());
