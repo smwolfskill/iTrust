@@ -1,6 +1,7 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
 import edu.ncsu.csc.itrust.DBUtil;
+import edu.ncsu.csc.itrust.action.EditPersonnelAction;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
 
@@ -58,4 +59,7 @@ public class MessageFilterDAO {
         }
     }
 
+    public void editMessageFilter(long MID, String nf, EditPersonnelAction editPersonnelAction) throws DBException {
+        editMessageFilter(MID, nf);
+    }
 }
