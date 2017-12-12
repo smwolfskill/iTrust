@@ -41,6 +41,7 @@ DELETE FROM cptcodes;
 DELETE FROM patients;
 DELETE FROM historypatients;
 DELETE FROM preregisteredpatients;
+DELETE FROM messagefilter;
 DELETE FROM users;
 
 DELETE FROM remotemonitoringdata;
