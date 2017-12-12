@@ -618,9 +618,4 @@ public class PersonnelDAO {
 			DBUtil.closeConnection(conn, pstmt);
 		}
 	}
-
-	public long getPersonnelMid(String firstName, String lastName) throws DBException
-	{
-		return searchForPersonnelWithName(firstName,lastName).get(0).getMID();
-	}
 }

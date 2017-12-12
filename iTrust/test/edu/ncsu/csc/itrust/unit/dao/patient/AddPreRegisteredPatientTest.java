@@ -1,7 +1,6 @@
 package edu.ncsu.csc.itrust.unit.dao.patient;
 
 import edu.ncsu.csc.itrust.beans.PreRegisterBean;
-import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.dao.mysql.PreRegisterDAO;
 import junit.framework.TestCase;
 import edu.ncsu.csc.itrust.beans.PatientBean;
@@ -15,7 +14,6 @@ public class AddPreRegisteredPatientTest extends TestCase
     private TestDataGenerator gen = new TestDataGenerator();
     private PatientDAO patientDAO = TestDAOFactory.getTestInstance().getPatientDAO();
     private PreRegisterDAO preRegisterDAO = TestDAOFactory.getTestInstance().getPreRegisterDAO();
-    private AuthDAO authDAO = TestDAOFactory.getTestInstance().getAuthDAO();
 
     protected void setUp() throws Exception {
         gen.clearAllTables();
@@ -35,7 +33,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.addPreregisterPatient(pid1,"10","10","0");
 
-        assertTrue(authDAO.getPreregistered(pid1));
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid1));
 
         //Test 2: null fields
         PatientBean p2 = new PatientBean();
@@ -47,7 +45,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.addPreregisterPatient(pid2, null, null, null);
 
-        assertTrue(authDAO.getPreregistered(pid2));
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid2));
     }
 
     public void testNegPreregisterPatient() throws Exception
@@ -59,7 +57,7 @@ public class AddPreRegisteredPatientTest extends TestCase
         long pid = patientDAO.addEmptyPatient();
         patientDAO.editPatient(p,pid);
 
-        assertFalse(authDAO.getPreregistered(pid));
+        assertFalse(preRegisterDAO.checkPreregisteredPatient(pid));
     }
 
     public void testGetPreregisterPatients() throws Exception
@@ -74,7 +72,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.addPreregisterPatient(pid1,"10","10","0");
 
-        assertTrue(authDAO.getPreregistered(pid1));
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid1));
 
         List<PreRegisterBean> preRegPat = preRegisterDAO.getPreregisteredPatients();
         assertEquals(2,preRegPat.size());
@@ -93,7 +91,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.addPreregisterPatient(pid1,"10","10","0");
 
-        assertTrue(authDAO.getPreregistered(pid1));
+        assertTrue(preRegisterDAO.checkPreregisteredPatient(pid1));
 
         PreRegisterBean preRegPat = preRegisterDAO.getPreregisteredPatient(pid1);
 
@@ -115,7 +113,7 @@ public class AddPreRegisteredPatientTest extends TestCase
 
         preRegisterDAO.activatePreregisteredPatient(pid1,90000000L);
 
-        assertFalse(authDAO.getPreregistered(pid1));
+        assertFalse(preRegisterDAO.checkPreregisteredPatient(pid1));
     }
 
     public void testDeactivatePreregisteredPatient() throws Exception
