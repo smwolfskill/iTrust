@@ -65,8 +65,8 @@ public class WeeklyScheduleActionTest extends TestCase {
         WeeklyScheduleAction.HeatmapData data = action.getHeatmapForWeekOf(cal.getTime());
         assertEquals(7, data.colorMap.length); //7 days
         assertEquals(1, data.colorMap[0].length); //1 hour
-        assertTrue(10 == data.earliestAndLatest.getKey()); //earliest is 10am
-        assertTrue(10 == data.earliestAndLatest.getValue()); //latest is 10am
+        assertTrue(10 == data.earliestAndLatest.key); //earliest is 10am
+        assertTrue(10 == data.earliestAndLatest.value); //latest is 10am
 
         //Check values of array:
         assertFalse(data.colorMap[0][0].equals(action.BASE_COLOR_STR)); //has non-empty color data

@@ -28,7 +28,7 @@
 
         /* If the patient id doesn't check out, then kick 'em out to the exception handler */
     PreRegisterDAO preRegisterDAO = prodDAO.getPreRegisterDAO();
-    boolean isPreregistered = preRegisterDAO.checkPreregisteredPatient(Long.parseLong(pidString));
+    boolean isPreregistered = authDAO.getPreregistered(Long.parseLong(pidString));
 
         /* Now take care of updating information */
 

@@ -227,6 +227,39 @@ public class AuthDAO {
 		}
 		return isDeactivated;
 	}
+
+	public boolean getPreregistered(final long mid) throws ITrustException {
+		final Role role = getUserRole(mid);
+		boolean isPreregistered;
+		if(role.equals(Role.PATIENT)) {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			try {
+				conn = factory.getConnection();
+				ps = conn.prepareStatement("SELECT * FROM PreRegisteredPatients WHERE MID=?");
+				ps.setLong(1, mid);
+				ResultSet results;
+				results = ps.executeQuery();
+				if (results.next()) {
+					results.close();
+					ps.close();
+					isPreregistered = true;
+				} else {
+					results.close();
+					ps.close();
+					throw new ITrustException("User does not exist");
+				}
+			} catch (SQLException e) {
+
+				throw new DBException(e);
+			} finally {
+				DBUtil.closeConnection(conn, ps);
+			}
+		} else {
+			isPreregistered = false;
+		}
+		return isPreregistered;
+	}
 	
 
 	/**
