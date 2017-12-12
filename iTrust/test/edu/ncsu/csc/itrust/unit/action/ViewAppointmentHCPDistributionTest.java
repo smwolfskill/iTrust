@@ -72,11 +72,19 @@ public class ViewAppointmentHCPDistributionTest extends TestCase{
         //Create a new date on 2012-08-22 and 2012-08-23
         Date startDate = new Date(112, 7, 22);
         Date endDate = new Date(112, 7, 23);
+
         String result = action.getDistribution(startDate, endDate, "all");
+
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        String startDateString = simpleDateFormat.format(startDate);
+        String endDateString = simpleDateFormat.format(endDate);
+
         String trueResult = "<img id=\"chart1\" width=720 src=\"https://chart.googleapis.com/chart?" +
                 "chtt=" + Integer.toString(1) + "+Appointments+For+" + "all" + "+from+" +
-                startDate.getMonth() + "-" + startDate.getDay() + "-" + Integer.toString(startDate.getYear() + 1900) + "+to+" +
-                endDate.getMonth() + "-" + endDate.getDay() + "-" + Integer.toString(endDate.getYear() + 1900) + "&amp;" +
+                startDateString + "+to+" +
+                endDateString + "&amp;" +
                 "cht=p3&amp;chs=500x200&amp;" +
                 1 + "&amp;" +
                 "John Zoidberg" + "&amp;" +

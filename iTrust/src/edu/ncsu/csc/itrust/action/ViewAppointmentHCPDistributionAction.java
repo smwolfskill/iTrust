@@ -1,5 +1,6 @@
 package edu.ncsu.csc.itrust.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,10 +56,15 @@ public class ViewAppointmentHCPDistributionAction {
         labels = labels.substring(0, labels.length() - 1);
         counts = counts.substring(0, counts.length() - 1);
 
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        String startDateString = simpleDateFormat.format(startDate);
+        String endDateString = simpleDateFormat.format(endDate);
+
         String result = "<img id=\"chart1\" width=720 src=\"https://chart.googleapis.com/chart?" +
                         "chtt=" + Integer.toString(sum) + "+Appointments+For+" + specialty + "+from+" +
-                        startDate.getMonth() + "-" + startDate.getDay() + "-" + Integer.toString(startDate.getYear() + 1900) + "+to+" +
-                        endDate.getMonth() + "-" + endDate.getDay() + "-" + Integer.toString(endDate.getYear() + 1900) + "&amp;" +
+                        startDateString + "+to+" + endDateString + "&amp;" +
                         "cht=p3&amp;chs=500x200&amp;" +
                         counts + "&amp;" +
                         labels + "&amp;" +
