@@ -5,7 +5,6 @@ import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.ApptDAO;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
-import javafx.util.Pair;
 
 import java.awt.*;
 import java.util.*;
@@ -22,17 +21,23 @@ public class WeeklyScheduleAction {
      */
     public class HeatmapData {
         public String[][] colorMap; //[day][hour] = color to show for day at hour (earliest + hour)
-        public Pair<Integer,Integer> earliestAndLatest; //(earliest, latest)
+        public IntPair earliestAndLatest; //(earliest, latest)
         public ArrayList<Integer> apptEntries; //sorted array of all appt entries per hour, excluding duplicates
         public int maxNumAppt = -1; //maximum #appts in an hour
 
-        public HeatmapData(String[][] colorMap, Pair<Integer,Integer> earliestAndLatest,
+        public HeatmapData(String[][] colorMap, IntPair earliestAndLatest,
                            ArrayList<Integer> apptEntries, int maxNumAppt) {
             this.colorMap = colorMap;
             this.earliestAndLatest = earliestAndLatest;
             this.apptEntries = apptEntries;
             this.maxNumAppt = maxNumAppt;
         }
+    }
+
+    public class IntPair {
+        public int key;
+        public int value;
+        public IntPair(int key, int value) {this.key = key; this.value = value;}
     }
 
 
@@ -74,9 +79,9 @@ public class WeeklyScheduleAction {
         }
 
         //2. Get earliest and latest times
-        Pair<Integer,Integer> earliestAndLatest = getEarliestAndLatestTime(appts);
-        int earliest = earliestAndLatest.getKey();
-        int latest = earliestAndLatest.getValue();
+        IntPair earliestAndLatest = getEarliestAndLatestTime(appts);
+        int earliest = earliestAndLatest.key;
+        int latest = earliestAndLatest.value;
 
         //3. Assign appointments by hour array
         int[][] apptsByDayByHour = new int[7][latest-earliest+1];
@@ -143,7 +148,7 @@ public class WeeklyScheduleAction {
      * @param appts List of appointments.
      * @return will contain (earliest, latest).
      */
-    private Pair<Integer, Integer> getEarliestAndLatestTime(List<ApptBean> appts) {
+    private IntPair getEarliestAndLatestTime(List<ApptBean> appts) {
         Calendar cal = Calendar.getInstance();
 
         int earliestHour = 23;
@@ -165,7 +170,7 @@ public class WeeklyScheduleAction {
             earliestHour = 7;
             latestHour = 19;
         }
-        return new Pair<Integer, Integer>(earliestHour, latestHour);
+        return new IntPair(earliestHour, latestHour);
     }
 
     private ArrayList<Integer> getDistinctApptEntries(int[][] apptsByDayByHour) {
