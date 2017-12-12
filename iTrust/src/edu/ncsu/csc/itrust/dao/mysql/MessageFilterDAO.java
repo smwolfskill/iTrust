@@ -58,8 +58,4 @@ public class MessageFilterDAO {
             DBUtil.closeConnection(conn, pstmt);
         }
     }
-
-    public void editMessageFilter(long MID, String nf, EditPersonnelAction editPersonnelAction) throws DBException {
-        editMessageFilter(MID, nf);
-    }
 }
