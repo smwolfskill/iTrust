@@ -67,7 +67,7 @@ pageTitle = "iTrust - View My Message ";
 				if(request.getParameter("test") != null) {
 					response.sendRedirect("messageInbox.jsp?edit=true&testFilter="+nf);
 				} else if(request.getParameter("save") != null) {
-					f_action.editMessageFilter(loggedInMID, nf);
+					f_action.messageFilterDAO.editMessageFilter(loggedInMID, nf, f_action);
 					response.sendRedirect("messageInbox.jsp?filter=true"); 
 				}
 			}

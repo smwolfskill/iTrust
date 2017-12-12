@@ -25,8 +25,6 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 	<%
 		loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0, "");
 		ViewMyMessagesAction action = new ViewMyMessagesAction(prodDAO, loggedInMID.longValue());
-		EditPersonnelAction f_action = new EditPersonnelAction(prodDAO, loggedInMID.longValue(), loggedInMID.toString());
-		PersonnelDAO dao = new PersonnelDAO(prodDAO);
 		MessageFilterDAO messageFilterDAO = new MessageFilterDAO(prodDAO);
 		boolean outbox=(Boolean)session.getAttribute("outbox");
 		List<MessageBean> messages = outbox?action.getAllMySentMessages():action.getAllMyMessages();
@@ -67,7 +65,7 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 					if(request.getParameter("test") != null) {
 						response.sendRedirect("messageInbox.jsp?edit=true&testFilter="+nf);
 					} else if(request.getParameter("save") != null) {
-						f_action.editMessageFilter(loggedInMID, nf);
+						messageFilterDAO.editMessageFilter(loggedInMID, nf);
 						response.sendRedirect("messageInbox.jsp?filter=true");
 					}
 				}
