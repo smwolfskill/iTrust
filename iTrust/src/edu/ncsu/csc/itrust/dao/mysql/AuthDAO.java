@@ -227,6 +227,27 @@ public class AuthDAO {
 		}
 		return isDeactivated;
 	}
+
+	public boolean getPreregistered(final long mid) throws ITrustException {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM PreRegisteredPatients WHERE MID=?");
+			ps.setLong(1, mid);
+
+			boolean check = (ps.executeQuery().next());
+			ps.close();
+			return check;
+		} catch (SQLException e) {
+
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+
+	}
 	
 
 	/**
