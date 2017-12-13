@@ -18,7 +18,7 @@ if(request.getUserPrincipal() != null) {
 	long mid = Long.valueOf(request.getUserPrincipal().getName());
 
 	if (request.isUserInRole("patient")) {
-	    if (prodDAO.getAuthDAO().getPreregistered(loggedInMID)) {
+	    if (prodDAO.getPreRegisterDAO().checkPreregisteredPatient(loggedInMID)) {
 	        response.sendRedirect("preRegistered.jsp");
 		} else {
 			response.sendRedirect("patient/home.jsp");

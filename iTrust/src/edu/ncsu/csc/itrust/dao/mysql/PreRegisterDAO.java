@@ -1,5 +1,6 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
+import com.sun.jna.platform.win32.Sspi;
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.HealthRecord;
 import edu.ncsu.csc.itrust.beans.PatientBean;
@@ -54,6 +55,26 @@ public class PreRegisterDAO
 
             ps.executeUpdate();
             ps.close();
+        } catch (SQLException e) {
+
+            throw new DBException(e);
+        } finally {
+            DBUtil.closeConnection(conn, ps);
+        }
+    }
+
+    public boolean checkPreregisteredPatient(long pid) throws DBException
+    {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = factory.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM PreRegisteredPatients WHERE MID=?");
+            ps.setLong(1, pid);
+
+            boolean check = (ps.executeQuery().next());
+            ps.close();
+            return check;
         } catch (SQLException e) {
 
             throw new DBException(e);
