@@ -38,7 +38,7 @@ we merge it into master with the rest of the team.
 ## Iteration 2
 In Iteration 2 I worked as a pair with Sean on UC14 Request Biosurveillance. Our pair worked on 
 RequestBiosurveillanceAction.java and epidemic detection algorithms using DiagnosesDAO queries,  
-while a second pair (Nicholas and Xiaorui) created the UI in WebRoot/auth/hcp/requestBiosurveillance.jsp. 
+while a second pair (Nicholas and Xiaorui) created the UI in requestBiosurveillance.jsp. 
 This time we followed a better procedure by opening a merge request from our branch UC14_1 into UC14. 
 Other members of the team posted a review, and we fixed minor issues before merging. This process was 
 repeated with a merge request from UC14 into master. I also reviewed and commented on other merge requests.
